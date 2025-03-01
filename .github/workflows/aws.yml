@@ -28,10 +28,6 @@ jobs:
     - name: Build the app
       run: npm run build
 
-    # アプリのエクスポート（静的サイトに変換）
-    - name: Export the app
-      run: npm run export
-
     # AWS CLI をインストール
     - name: Install AWS CLI
       run: |
