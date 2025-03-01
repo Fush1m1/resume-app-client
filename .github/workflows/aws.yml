@@ -1,0 +1,44 @@
+name: Deploy React App to S3
+
+on:
+  push:
+    branches:
+      - main  # mainブランチにpushされた時にデプロイ
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. GitHub ActionsにAWSクレデンシャルを設定
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'  # 使用するNode.jsのバージョン
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build the app
+        run: npm run build
+
+      # 2. AWS CLIを設定してS3バケットにアップロード
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: 'ap-northeast-1'
+
+      - name: Sync build to S3
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          source_dir: './build'  # Reactのビルドディレクトリ
+          destination_dir: 's3://my-resumeapp-bucket'  # 対象のS3バケット名
+
+      # 3. 完了メッセージ
+      - name: Deployment successful
+        run: echo "React app deployed to S3 successfully!"
