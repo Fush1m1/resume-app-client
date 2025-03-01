@@ -31,7 +31,7 @@ jobs:
     # AWS S3 にデプロイ
     - name: Deploy to S3
       run: |
-        aws s3 sync ./out s3://my-resumeapp-bucket --delete --acl public-read --region ap-northeast-1
+        aws s3 sync ./next s3://my-resumeapp-bucket --delete --region ap-northeast-1
 
     # オプション: CloudFront の無効化 (キャッシュをクリア)
     - name: Invalidate CloudFront cache
