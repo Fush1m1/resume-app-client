@@ -6,7 +6,7 @@ type ResponseData = {
 };
 
 // API_URLをfetchしてresに格納
-export async function fetchHoge(): Promise<ResponseData> {
+export async function fetchApi(): Promise<ResponseData> {
   const res = await fetch(`https://${API_URL}`);
   const data = await res.json();  // Await here instead of using .then
   console.log(data);
@@ -14,15 +14,15 @@ export async function fetchHoge(): Promise<ResponseData> {
 }
 
 let data: ResponseData | undefined;
-fetchHoge().then((fetchedData) => {
+fetchApi().then((fetchedData) => {
   data = fetchedData;
   console.log(data);
 });
 
-export function Hoge() {
+export function ResComponent() {
   return (
     <div>
-      <h1>{data?.message}</h1>  {/* Safely access the message */}
+      <h1>{data?.message}</h1>
     </div>
   );
 }

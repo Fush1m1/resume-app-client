@@ -1,9 +1,10 @@
-import { Hoge } from "./hoge";
-import { fetchHoge } from "./hoge";
+import { ResComponent } from "./api";
 
 export default function Home() {
-  fetchHoge();
   return (
-    <Hoge />
+    <div>
+      <h1>Hello, World!</h1>
+      <ResComponent />
+    </div>
   );
 }
