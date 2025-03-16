@@ -9,7 +9,7 @@ export async function fetchHoge(): Promise<any> {
   });
 }
 
-var data: string | undefined;
+let data: string | undefined;
 fetchHoge().then((fetchedData) => {
   data = fetchedData;
   console.log(data);
