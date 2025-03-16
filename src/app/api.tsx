@@ -1,6 +1,5 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-// Define the response data type
 type ResponseData = {
   message: string;
 };
@@ -8,9 +7,9 @@ type ResponseData = {
 // API_URLをfetchしてresに格納
 export async function fetchApi(): Promise<ResponseData> {
   const res = await fetch(`https://${API_URL}`);
-  const data = await res.json();  // Await here instead of using .then
+  const data = await res.json();
   console.log(data);
-  return data;  // Return the data as ResponseData
+  return data;
 }
 
 let data: ResponseData | undefined;
@@ -22,7 +21,7 @@ fetchApi().then((fetchedData) => {
 export function ResComponent() {
   return (
     <div>
-      <h1>{data?.message}</h1>
+      <h1>{data?.message || "loading..."}</h1>
     </div>
   );
 }
