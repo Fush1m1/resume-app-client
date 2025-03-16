@@ -1,27 +1,31 @@
+'use client';
+
+import { useEffect, useState } from "react";
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-type ResponseData = {
-  message: string;
-};
-
-// API_URLをfetchしてresに格納
-export async function fetchApi(): Promise<ResponseData> {
-  const res = await fetch(`https://${API_URL}`);
-  const data = await res.json();
-  console.log(data);
-  return data;
+async function fetchApi(): Promise<string> {
+  const res = await fetch(`${API_URL}`);
+  const text = await res.text();
+  return text;
 }
 
-let data: ResponseData | undefined;
-fetchApi().then((fetchedData) => {
-  data = fetchedData;
-  console.log(data);
-});
-
 export function ResComponent() {
+  const [data, setData] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchApi().then((fetchedData) => {
+      console.log("Fetched data:", fetchedData);
+      setData(fetchedData);
+    }).catch((err) => {
+      console.error("Failed to fetch API:", err);
+      setData("Error loading data");
+    });
+  }, []);
+
   return (
     <div>
-      <h1>{data?.message || "loading..."}</h1>
+      <h1>{data ?? "loading..."}</h1>
     </div>
   );
 }
