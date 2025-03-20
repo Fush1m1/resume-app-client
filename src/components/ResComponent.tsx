@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-const API_URL = 'http://0.0.0.0:8080';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 async function healthCheck(): Promise<string> {
   const res = await fetch(`${API_URL}`);
