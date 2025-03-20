@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = 'http://0.0.0.0:8080';
 
 async function fetchApi(): Promise<string> {
   const res = await fetch(`${API_URL}`);
