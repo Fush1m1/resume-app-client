@@ -1,29 +1,19 @@
 'use client';
 
-import { useState } from "react";
-
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import useSWR from "swr";
 
+const fetcher = (url: string) => fetch(url).then((res) => res.text());
 
 export function DbManipulateComponent() {
-  const [data, setData] = useState<string | null>(null);
+  const { data, error } = useSWR(`${API_URL}/dbManipulate`, fetcher);
 
-  async function handleButtonClick() {
-    try {
-      const res = await fetch(`${API_URL}/dbManipulate`);
-      const text = await res.text();
-      console.log("Response:", text);
-      setData(text);
-    } catch (err) {
-      console.error("Failed to fetch API:", err);
-      setData("Error loading data");
-    }
-  }
+  if (error) return <div>Error loading data</div>;
+  if (!data) return <div>Loading...</div>;
 
   return (
     <div>
-      <button onClick={handleButtonClick}>Click me to manipulate DB</button>
-      <h1>{data ?? "loading..."}</h1>
+      <h1>{data}</h1>
     </div>
   );
 }
