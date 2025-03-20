@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 const API_URL = 'http://0.0.0.0:8080';
 
-async function fetchApi(): Promise<string> {
+async function healthCheck(): Promise<string> {
   const res = await fetch(`${API_URL}`);
   const text = await res.text();
   return text;
@@ -14,7 +14,7 @@ export function ResComponent() {
   const [data, setData] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchApi().then((fetchedData) => {
+    healthCheck().then((fetchedData) => {
       console.log("Fetched data:", fetchedData);
       setData(fetchedData);
     }).catch((err) => {

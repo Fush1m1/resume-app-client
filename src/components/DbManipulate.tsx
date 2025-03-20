@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 
-// const API_URL = process.env.NEXT_PUBLIC_API_URL;
-const API_URL = 'http://0.0.0.0:8080';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 
 export function DbManipulateComponent() {
