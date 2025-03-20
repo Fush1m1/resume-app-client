@@ -1,5 +1,5 @@
 import { ResComponent } from "@/components/ResComponent";
-import { DbManipulateComponent } from "../components/DbManipulate";
+import { DbDeleteComponent, DbManipulateComponent, DbUpdateComponent } from "../components/DbManipulate";
 
 export default function Home() {
   return (
@@ -7,6 +7,8 @@ export default function Home() {
       <h1>Hello, World!</h1>
       <ResComponent />
       <DbManipulateComponent />
+      <DbUpdateComponent />
+      <DbDeleteComponent />
     </div>
   );
 }
