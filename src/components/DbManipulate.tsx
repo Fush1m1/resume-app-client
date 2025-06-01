@@ -25,7 +25,7 @@ async function sendDeleteRequest(url: string) {
   return text;
 }
 
-export function DbManipulateComponent() {
+export function DbGetComponent() {
   const { data, error } = useSWR(`${API_URL}/getDBContent`, fetcher);
 
   if (error) return <div>Error loading data</div>;
@@ -33,39 +33,45 @@ export function DbManipulateComponent() {
 
   return (
     <div>
-      {/* message box */}
-      
+      <FormBox />
       <h1>{data}</h1>
     </div>
   );
 }
 
 export function DbUpdateComponent() {
-  const { data, error } = useSWR(() => `${API_URL}/updateDBContent/hoge`, sendPostRequest);
+  const { data, error } = useSWR(() => `${API_URL}/updateDBContent/article`, sendPostRequest);
 
   if (error) return <div>Error loading data</div>;
   if (!data) return <div>Loading...</div>;
 
   return (
     <div>
-      {/* message box */}
-      
+      <FormBox />
       <h1>{data}</h1>
     </div>
   );
 }
 
 export function DbDeleteComponent() {
-  const { data, error } = useSWR(() => `${API_URL}/deleteDBContent/hoge`, sendDeleteRequest);
+  const { data, error } = useSWR(() => `${API_URL}/deleteDBContent/article`, sendDeleteRequest);
 
   if (error) return <div>Error loading data</div>;
   if (!data) return <div>Loading...</div>;
 
   return (
     <div>
-      {/* message box */}
-      
+      <FormBox />
       <h1>{data}</h1>
     </div>
+  );
+}
+
+function FormBox() {
+  return (
+    <form>
+      <input name="query" />
+      <button type="submit">submit</button>
+    </form>
   );
 }
