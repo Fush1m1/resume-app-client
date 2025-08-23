@@ -8,8 +8,7 @@ import { useState } from "react";
 const API_URL = 'http://0.0.0.0:8080';
 const fetcher = (url: string) => fetch(url).then((res) => res.text());
 
-
-const sendPostRequest = async (url: string, { arg }: { arg: { message: string } }) => {
+const sendPostRequest = async(url: string, { arg }: { arg: { message: string } }) => {
   const res = await fetch(url, {
     method: 'POST',
     headers: {
@@ -24,7 +23,7 @@ const sendPostRequest = async (url: string, { arg }: { arg: { message: string } 
   return res.text();
 };
 
-const sendDeleteRequest = async (url: string, { arg }: { arg: { article_uuid: string } }) => {
+const sendDeleteRequest = async(url: string, { arg }: { arg: { article_uuid: string } }) => {
   const res = await fetch(url, {
     method: 'DELETE',
     headers: {
@@ -54,26 +53,26 @@ export function DbGetComponent() {
 
 export function DbUpdateComponent() {
   const [input, setInput] = useState('');
-    const { trigger, data, error, isMutating } = useSWRMutation(
-      `${API_URL}/updateDBContent/article`,
-      sendPostRequest
-    );
+  const { trigger, data, error, isMutating } = useSWRMutation(
+    `${API_URL}/updateDBContent/article`,
+    sendPostRequest
+  );
 
-    const handleSubmit = () => {
-      trigger({ message: input });
-    };
+  const handleSubmit = () => {
+    trigger({ message: input });
+  };
 
   return (
     <div>
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Enter message"
-        />
-        <button onClick={handleSubmit} disabled={isMutating}>
-          {isMutating ? 'Sending...' : 'Send Message'}
-        </button>
+      <input
+        type="text"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        placeholder="Enter message"
+      />
+      <button onClick={handleSubmit} disabled={isMutating}>
+        {isMutating ? 'Sending...' : 'Send Message'}
+      </button>
 
       {error && <div>Error: {error.message}</div>}
       {data && <h1>Response: {data}</h1>}
@@ -83,26 +82,26 @@ export function DbUpdateComponent() {
 
 export function DbDeleteComponent() {
   const [input, setInput] = useState('');
-    const { trigger, data, error, isMutating } = useSWRMutation(
-      `${API_URL}/deleteDBContent/article`,
-      sendDeleteRequest
-    );
+  const { trigger, data, error, isMutating } = useSWRMutation(
+    `${API_URL}/deleteDBContent/article`,
+    sendDeleteRequest
+  );
 
-    const handleSubmit = () => {
-      trigger({ article_uuid: input });
-    };
+  const handleSubmit = () => {
+    trigger({ article_uuid: input });
+  };
 
   return (
     <div>
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Enter message"
-        />
-        <button onClick={handleSubmit} disabled={isMutating}>
-          {isMutating ? 'Sending...' : 'Send Message'}
-        </button>
+      <input
+        type="text"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        placeholder="Enter message"
+      />
+      <button onClick={handleSubmit} disabled={isMutating}>
+        {isMutating ? 'Sending...' : 'Send Message'}
+      </button>
 
       {error && <div>Error: {error.message}</div>}
       {data && <h1>Response: {data}</h1>}
