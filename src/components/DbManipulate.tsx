@@ -1,10 +1,11 @@
 'use client';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+// const API_URL = process.env.NEXT_PUBLIC_API_URL;
 import useSWR from "swr";
 import useSWRMutation from 'swr/mutation';
 import { useState } from "react";
 
+const API_URL = 'http://0.0.0.0:8080';
 const fetcher = (url: string) => fetch(url).then((res) => res.text());
 
 
