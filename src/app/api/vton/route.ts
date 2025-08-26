@@ -8,6 +8,11 @@ import fs from "fs/promises";
 import {writeFileSync} from "fs";
 import { Buffer } from "buffer";
 
+if (process.env.GOOGLE_AUTH_JSON) {
+  writeFileSync("/tmp/auth.json", process.env.GOOGLE_AUTH_JSON);
+  process.env.GOOGLE_APPLICATION_CREDENTIALS = "/tmp/auth.json";
+}
+
 async function encodeImage(filePath: string): Promise<string> {
   const imageBuffer = await fs.readFile(filePath);
   return imageBuffer.toString("base64");
@@ -19,11 +24,6 @@ export async function POST(req: Request) {
 
   if (!person || !dress) {
     return NextResponse.json({ success: false, error: "person と dress は必須です" });
-  }
-  
-  if (process.env.GOOGLE_AUTH_JSON) {
-    writeFileSync("/tmp/auth.json", process.env.GOOGLE_AUTH_JSON);
-    process.env.GOOGLE_APPLICATION_CREDENTIALS = "/tmp/auth.json";
   }
 
   try {
