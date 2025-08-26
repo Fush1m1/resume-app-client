@@ -24,7 +24,6 @@ export async function POST(req: Request) {
     const auth = new GoogleAuth({
       scopes: "https://www.googleapis.com/auth/cloud-platform",
     });
-    const client = await auth.getClient();
     const projectId = await auth.getProjectId();
     const location = "us-central1";
     const modelId = "virtual-try-on-preview-08-04";
