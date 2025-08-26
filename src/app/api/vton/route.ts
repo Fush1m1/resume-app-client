@@ -30,7 +30,7 @@ export async function POST(req: Request) {
         "private_key": privateKey,
         "client_email": clientEmail,
       },
-      scopes: "https://www.googleapis.com/auth/cloud-platform",
+      scopes: ["https://www.googleapis.com/auth/cloud-platform"],
     });
     const location = "us-central1";
     const modelId = "virtual-try-on-preview-08-04";
