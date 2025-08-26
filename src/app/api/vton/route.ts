@@ -21,10 +21,12 @@ export async function POST(req: Request) {
   }
 
   try {
+    const credentials = JSON.parse(process.env.GOOGLE_AUTH_JSON || '{}');
     const auth = new GoogleAuth({
+      credentials,
       scopes: "https://www.googleapis.com/auth/cloud-platform",
     });
-    const projectId = "nomadic-freedom-353208";
+    const projectId = await auth.getProjectId();  
     const location = "us-central1";
     const modelId = "virtual-try-on-preview-08-04";
 
