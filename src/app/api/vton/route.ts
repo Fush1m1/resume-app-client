@@ -23,7 +23,7 @@ export async function POST(req: Request) {
   try {
     const privateKey = process.env.PRIVATE_KEY?.replace(/\\n/g, "\n");
     const clientEmail = process.env.GOOGLE_CLIENT_EMAIL ?? "tryontest@nomadic-freedom-353208.iam.gserviceaccount.com";
-    const projectId = process.env.PROJECT_ID;
+    const projectId = process.env.PROJECT_ID ?? "nomadic-freedom-353208";
     const auth = new GoogleAuth({
       credentials: {
         "private_key": privateKey,
