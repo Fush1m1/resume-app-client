@@ -8,15 +8,6 @@ import fs from "fs/promises";
 import {writeFileSync} from "fs";
 import { Buffer } from "buffer";
 
-async function env(): Promise<void> {
-  if (process.env.GOOGLE_AUTH_JSON) {
-    console.log("Found GOOGLE_AUTH_JSON environment variable");
-    writeFileSync("/tmp/auth.json", process.env.GOOGLE_AUTH_JSON);
-    process.env.GOOGLE_APPLICATION_CREDENTIALS = "/tmp/auth.json";
-    console.log("Set GOOGLE_APPLICATION_CREDENTIALS environment variable");
-  }
-}
-
 async function encodeImage(filePath: string): Promise<string> {
   const imageBuffer = await fs.readFile(filePath);
   return imageBuffer.toString("base64");
