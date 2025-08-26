@@ -32,9 +32,7 @@ export async function POST(req: Request) {
   }
 
   try {
-    const credentials = JSON.parse(process.env.GOOGLE_AUTH_JSON || '{}');
     const auth = new GoogleAuth({
-      credentials,
       scopes: "https://www.googleapis.com/auth/cloud-platform",
     });
     const projectId = await auth.getProjectId();  
