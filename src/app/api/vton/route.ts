@@ -5,7 +5,6 @@ import axios from "axios";
 import sharp from "sharp";
 import path from "path";
 import fs from "fs/promises";
-import {writeFileSync} from "fs";
 import { Buffer } from "buffer";
 
 async function encodeImage(filePath: string): Promise<string> {
