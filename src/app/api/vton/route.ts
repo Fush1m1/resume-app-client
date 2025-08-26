@@ -5,6 +5,7 @@ import axios from "axios";
 import sharp from "sharp";
 import path from "path";
 import fs from "fs/promises";
+import {writeFileSync} from "fs";
 import { Buffer } from "buffer";
 
 async function encodeImage(filePath: string): Promise<string> {
@@ -18,6 +19,11 @@ export async function POST(req: Request) {
 
   if (!person || !dress) {
     return NextResponse.json({ success: false, error: "person と dress は必須です" });
+  }
+  
+  if (process.env.GOOGLE_AUTH_JSON) {
+    writeFileSync("/tmp/auth.json", process.env.GOOGLE_AUTH_JSON);
+    process.env.GOOGLE_APPLICATION_CREDENTIALS = "/tmp/auth.json";
   }
 
   try {
