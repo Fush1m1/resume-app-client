@@ -9,8 +9,18 @@ import {writeFileSync} from "fs";
 import { Buffer } from "buffer";
 
 if (process.env.GOOGLE_AUTH_JSON) {
+  console.log("hoge");
   writeFileSync("/tmp/auth.json", process.env.GOOGLE_AUTH_JSON);
   process.env.GOOGLE_APPLICATION_CREDENTIALS = "/tmp/auth.json";
+}
+
+async function env(): Promise<void> {
+  if (process.env.GOOGLE_AUTH_JSON) {
+    console.log("hoge");
+    writeFileSync("/tmp/auth.json", process.env.GOOGLE_AUTH_JSON);
+    process.env.GOOGLE_APPLICATION_CREDENTIALS = "/tmp/auth.json";
+    console.log("hoge");
+  }
 }
 
 async function encodeImage(filePath: string): Promise<string> {
@@ -19,6 +29,7 @@ async function encodeImage(filePath: string): Promise<string> {
 }
 
 export async function POST(req: Request) {
+  await env();
   const body = await req.json();
   const { person, dress } = body;
 
