@@ -13,7 +13,7 @@ async function encodeImage(filePath: string): Promise<string> {
 }
 
 export async function POST(req: Request) {
-  console.log(process.env.GOOGLE_APPLICATION_CREDENTIALS);  
+  console.log(process.env.GOOGLE_AUTH_JSON);  
   const body = await req.json();
   const { person, dress } = body;
 
