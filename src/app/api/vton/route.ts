@@ -5,6 +5,7 @@ import axios from "axios";
 import sharp from "sharp";
 import path from "path";
 import fs from "fs/promises";
+import { writeFileSync } from "fs";
 import { Buffer } from "buffer";
 
 async function encodeImage(filePath: string): Promise<string> {
@@ -13,7 +14,16 @@ async function encodeImage(filePath: string): Promise<string> {
 }
 
 export async function POST(req: Request) {
-  console.log(process.env.GOOGLE_AUTH_JSON);  
+  console.log(process.env.GOOGLE_AUTH_JSON);
+
+  if (process.env.GOOGLE_AUTH_JSON) {
+    const authPath = "/tmp/auth.json";
+    // \n を改行に置き換える
+    const jsonContent = process.env.GOOGLE_AUTH_JSON.replace(/\\n/g, "\n");
+    writeFileSync(authPath, jsonContent);
+    process.env.GOOGLE_APPLICATION_CREDENTIALS = authPath;
+  }
+
   const body = await req.json();
   const { person, dress } = body;
 
