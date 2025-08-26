@@ -17,7 +17,8 @@ export async function POST(req: Request) {
   const { person, dress } = body;
 
   const privateKey = process.env.PRIVATE_KEY?.replace(/\\n/g, "\n");
-//   const clientEmail = process.env.GOOGLE_CLIENT_EMAIL;
+  const clientEmail = process.env.GOOGLE_CLIENT_EMAIL;
+  console.log(clientEmail);
   const projectId = process.env.PROJECT_ID;
 
   if (!person || !dress) {
@@ -28,7 +29,7 @@ export async function POST(req: Request) {
     const auth = new GoogleAuth({
       credentials: {
         "private_key": privateKey,
-        // "client_email": clientEmail,
+        "client_email": clientEmail,
       },
       scopes: "https://www.googleapis.com/auth/cloud-platform",
     });
