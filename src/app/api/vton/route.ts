@@ -17,7 +17,8 @@ export async function POST(req: Request) {
   const { person, dress } = body;
 
   const privateKey = process.env.PRIVATE_KEY?.replace(/\\n/g, "\n");
-  const client_email = process.env.CLIENT_EMAIL;
+  const clientEmail = process.env.CLIENT_EMAIL;
+  const projectId = process.env.PROJECT_ID;
 
   if (!person || !dress) {
     return NextResponse.json({ success: false, error: "person と dress は必須です" });
@@ -27,11 +28,10 @@ export async function POST(req: Request) {
     const auth = new GoogleAuth({
       credentials: {
         "private_key": privateKey,
-        "client_email": client_email,
+        "client_email": clientEmail,
       },
       scopes: "https://www.googleapis.com/auth/cloud-platform",
     });
-    const projectId = "nomadic-freedom-353208";
     const location = "us-central1";
     const modelId = "virtual-try-on-preview-08-04";
 
