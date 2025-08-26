@@ -14,18 +14,11 @@ async function encodeImage(filePath: string): Promise<string> {
 }
 
 export async function POST(req: Request) {
-  console.log(process.env.GOOGLE_AUTH_JSON);
-
-  if (process.env.GOOGLE_AUTH_JSON) {
-    const authPath = "/tmp/auth.json";
-    // \n を改行に置き換える
-    const jsonContent = process.env.GOOGLE_AUTH_JSON.replace(/\\n/g, "\n");
-    writeFileSync(authPath, jsonContent);
-    process.env.GOOGLE_APPLICATION_CREDENTIALS = authPath;
-  }
-
   const body = await req.json();
   const { person, dress } = body;
+
+  const privateKey = process.env.PRIVATE_KEY?.replace(/\\n/g, "\n");
+  const client_email = process.env.CLIENT_EMAIL;
 
   if (!person || !dress) {
     return NextResponse.json({ success: false, error: "person と dress は必須です" });
@@ -33,9 +26,13 @@ export async function POST(req: Request) {
 
   try {
     const auth = new GoogleAuth({
+      credentials: {
+        "private_key": privateKey,
+        "client_email": client_email,
+      },
       scopes: "https://www.googleapis.com/auth/cloud-platform",
     });
-    const projectId = await auth.getProjectId();  
+    const projectId = "nomadic-freedom-353208";
     const location = "us-central1";
     const modelId = "virtual-try-on-preview-08-04";
 
