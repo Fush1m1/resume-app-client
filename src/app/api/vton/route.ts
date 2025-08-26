@@ -11,15 +11,14 @@ async function encodeImage(filePath: string): Promise<string> {
   const imageBuffer = await fs.readFile(filePath);
   return imageBuffer.toString("base64");
 }
+const privateKey = process.env.PRIVATE_KEY?.replace(/\\n/g, "\n");
+const clientEmail = process.env.GOOGLE_CLIENT_EMAIL;
+console.log(clientEmail);
+const projectId = process.env.PROJECT_ID;
 
 export async function POST(req: Request) {
   const body = await req.json();
   const { person, dress } = body;
-
-  const privateKey = process.env.PRIVATE_KEY?.replace(/\\n/g, "\n");
-  const clientEmail = process.env.GOOGLE_CLIENT_EMAIL;
-  console.log(clientEmail);
-  const projectId = process.env.PROJECT_ID;
 
   if (!person || !dress) {
     return NextResponse.json({ success: false, error: "person と dress は必須です" });
