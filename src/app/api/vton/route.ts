@@ -17,7 +17,7 @@ export async function POST(req: Request) {
   const { person, dress } = body;
 
   const privateKey = process.env.PRIVATE_KEY?.replace(/\\n/g, "\n");
-  const clientEmail = process.env.GOOGLE_CLIENT_EMAIL;
+//   const clientEmail = process.env.GOOGLE_CLIENT_EMAIL;
   const projectId = process.env.PROJECT_ID;
 
   if (!person || !dress) {
