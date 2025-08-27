@@ -11,7 +11,6 @@ export type RunPythonButtonProps = {
 export default function RunPythonButton({ selectedPerson, selectedDress }: RunPythonButtonProps) {
   const [loading, setLoading] = useState(false);
   const [resultImage, setResultImage] = useState<string | null>(null);
-
   const runScript = async() => {
     if (!selectedPerson || !selectedDress) {
       alert("人物と服を選択してください");
@@ -20,9 +19,9 @@ export default function RunPythonButton({ selectedPerson, selectedDress }: RunPy
 
     setLoading(true);
     setResultImage(null);
-
     try {
-      const res = await fetch("/api/vton", {
+      const apiUrl = new URL("/api/vton", window.location.origin).href;
+      const res = await fetch(apiUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ person: selectedPerson, dress: selectedDress }),
