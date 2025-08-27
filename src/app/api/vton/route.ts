@@ -79,7 +79,7 @@ export async function POST(req: Request) {
     }
 
     const result = response.data;
-    const outputDir = path.resolve("./public/results");
+    const outputDir = "/tmp/results";
     await fs.mkdir(outputDir, { recursive: true });
 
     const savedPaths = [];
@@ -92,8 +92,10 @@ export async function POST(req: Request) {
       
       await sharp(imgData).toFile(filepath);
       
-      const relativePath = `/results/vton_${timestamp}_${i}.png`;
-      savedPaths.push(relativePath);
+      const imageBuffer = await fs.readFile(filepath);
+      const base64Image = imageBuffer.toString("base64");
+      const dataUrl = `data:image/png;base64,${base64Image}`;
+      savedPaths.push(dataUrl);
     }
 
     return NextResponse.json({ success: true, resultImage: savedPaths[0] });
