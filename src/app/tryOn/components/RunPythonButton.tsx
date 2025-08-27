@@ -11,6 +11,9 @@ export type RunPythonButtonProps = {
 export default function RunPythonButton({ selectedPerson, selectedDress }: RunPythonButtonProps) {
   const [loading, setLoading] = useState(false);
   const [resultImage, setResultImage] = useState<string | null>(null);
+  const apiBaseUrl = process.env.NEXT_PUBLIC_VERCEL_URL
+    ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+    : 'http://localhost:3000';
 
   const runScript = async() => {
     if (!selectedPerson || !selectedDress) {
@@ -20,9 +23,8 @@ export default function RunPythonButton({ selectedPerson, selectedDress }: RunPy
 
     setLoading(true);
     setResultImage(null);
-
-    try {
-      const res = await fetch("/api/vton", {
+    try{
+      const res = await fetch(`${apiBaseUrl}/api/vton`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ person: selectedPerson, dress: selectedDress }),
