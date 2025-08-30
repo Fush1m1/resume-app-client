@@ -1,28 +1,40 @@
-import { useState } from "react";
 import Image from "next/image";
-import { RunAPIProps } from "./RunAPIButton";
 
-export function ResultView({ selectedPerson, selectedDress }: RunAPIProps) {
-  const [exists, setExists] = useState(true);
+export type ResultViewProps = {
+  loading: boolean;
+  error: string | null;
+  resultImage: string | null;
+};
 
-  if (!selectedPerson || !selectedDress) {
-    return null;
+export function ResultView({ loading, error, resultImage }: ResultViewProps) {
+  if (loading) {
+    return (
+      <div>
+      </div>
+    );
   }
 
-  const resultFileName = `/results/vton_${selectedPerson}_${selectedDress}_0.png`;
-  // 画像読み込み失敗時に非表示
-  if (!exists) return null;
+  if (error) {
+    return (
+      <div>
+        <p>エラーが発生しました: {error}</p>
+      </div>
+    );
+  }
+
+  if (!resultImage) {
+    return null;
+  }
 
   return (
     <div>
       <h2>生成結果</h2>
       <Image
-        src={resultFileName}
+        src={resultImage}
         alt="試着結果"
         width={192}
         height={288}
         className="rounded-lg shadow"
-        onError={() => setExists(false)} // 読み込めなかったら非表示に
       />
     </div>
   );
