@@ -1,8 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
 import { POST } from "./route";
-import axios from "axios";
-import fs from "fs/promises";
-import sharp, { Sharp } from "sharp";
 
 vi.mock("axios");
 vi.mock("fs/promises");
