@@ -58,7 +58,7 @@ export default function TryOn() {
 
   return (
     <div className="w-full max-w-5xl space-y-10">
-      <header className="text-center space-y-2 bg-purple-100 border border-purple-200 rounded-2xl p-6 sm:p-8">
+      <header className="text-center space-y-2 bg-purple-200 border border-purple-300 rounded-2xl p-6 sm:p-8">
         <h1 className="font-bold tracking-tight text-purple-900 text-[clamp(1.875rem,5vw,3rem)] leading-tight">
           釈迦遺 Virtual Try-On
         </h1>
