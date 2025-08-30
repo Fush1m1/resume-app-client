@@ -2,10 +2,12 @@
 
 import { useState, useEffect, useRef } from "react";
 import RunAPIButton from "./components/RunAPIButton";
-import Link from "next/link";
-import Image from "next/image";
+
+import { PhotoCard } from "./components/PhotoCard";
 import { ResultView } from "./components/ResultView";
 import { SectionWrapper } from "./components/SectionWrapper";
+import { Header } from "./components/Header";
+import { BackHomeButton } from "./components/BackHomeButton";
 
 export default function TryOn() {
   const [selectedPerson, setSelectedPerson] = useState<string | null>(null);
@@ -52,21 +54,13 @@ export default function TryOn() {
 
   useEffect(() => {
     if (resultImage && resultViewRef.current) {
-      resultViewRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+      resultViewRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   }, [resultImage]);
 
   return (
-    <div className="w-full max-w-5xl space-y-10">
-      <header className="text-center space-y-2 bg-purple-200 border border-purple-300 rounded-2xl p-6 sm:p-8">
-        <h1 className="font-bold tracking-tight text-purple-900 text-[clamp(1.875rem,5vw,3rem)] leading-tight">
-          釈迦遺 Virtual Try-On
-        </h1>
-        <p className="text-purple-700">
-          Choose photos to generate images.
-        </p>
-      </header>
-
+    <div className="w-full max-w-5xl space-y-10 pb-30">
+      <Header />
       <Person
         selected={selectedPerson}
         onSelect={setSelectedPerson}
@@ -80,26 +74,13 @@ export default function TryOn() {
       <div className="flex justify-center pt-4">
         <RunAPIButton loading={loading} onClick={runScript} />
       </div>
-
       <div ref={resultViewRef} className="pt-6">
         <ResultView loading={loading} error={error} resultImage={resultImage} />
       </div>
-
-      <footer className="text-center pt-10">
+      <footer className="text-center pt-50">
         <BackHomeButton />
       </footer>
     </div>
-  );
-}
-
-function BackHomeButton() {
-  return (
-    <Link
-      href="/"
-      className="text-sm font-semibold text-gray-600 hover:text-gray-800 transition-colors"
-    >
-      &larr; Back to Home
-    </Link>
   );
 }
 
@@ -119,26 +100,15 @@ function Person({ selected, onSelect, disabled }: SelectProps) {
     <SectionWrapper>
       <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
         {persons.map((p) => (
-          <button
+          <PhotoCard
             key={p.id}
-            onClick={() => onSelect(p.id)}
+            id={p.id}
+            src={p.src}
+            alt={p.alt}
+            selected={selected === p.id}
+            onSelect={() => onSelect(p.id)}
             disabled={disabled}
-            className={`rounded-xl overflow-hidden transition-all duration-200 focus:outline-none ring-offset-4 ring-offset-gray-50 ${
-              selected === p.id
-                ? "ring-2 ring-blue-500"
-                : "ring-1 ring-gray-300 hover:ring-2 hover:ring-blue-400"
-            } ${
-              disabled ? "opacity-60 cursor-not-allowed" : "active:scale-95"
-            }`}
-          >
-            <Image
-              src={p.src}
-              alt={p.alt}
-              width={192}
-              height={288}
-              className="bg-white"
-            />
-          </button>
+          />
         ))}
       </div>
     </SectionWrapper>
@@ -156,26 +126,15 @@ function Dress({ selected, onSelect, disabled }: SelectProps) {
     <SectionWrapper>
       <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
         {dresses.map((d) => (
-          <button
+          <PhotoCard
             key={d.id}
-            onClick={() => onSelect(d.id)}
+            id={d.id}
+            src={d.src}
+            alt={d.alt}
+            selected={selected === d.id}
+            onSelect={() => onSelect(d.id)}
             disabled={disabled}
-            className={`rounded-xl overflow-hidden transition-all duration-200 focus:outline-none ring-offset-4 ring-offset-gray-50 ${
-              selected === d.id
-                ? "ring-2 ring-blue-500"
-                : "ring-1 ring-gray-300 hover:ring-2 hover:ring-blue-400"
-            } ${
-              disabled ? "opacity-60 cursor-not-allowed" : "active:scale-95"
-            }`}
-          >
-            <Image
-              src={d.src}
-              alt={d.alt}
-              width={192}
-              height={288}
-              className="bg-white"
-            />
-          </button>
+          />
         ))}
       </div>
     </SectionWrapper>
