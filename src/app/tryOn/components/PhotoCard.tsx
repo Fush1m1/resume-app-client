@@ -12,7 +12,10 @@ type PhotoCardProps = {
 export function PhotoCard({ id, src, alt, selected, onSelect, disabled }: PhotoCardProps) {
   const handleClick = () => {
     if (navigator.vibrate) {
-      navigator.vibrate(100); // Vibrate for 100ms
+      console.log("Vibrating for 200ms");
+      navigator.vibrate(200);
+    } else {
+      console.log("Vibration API not supported");
     }
     onSelect();
   };
