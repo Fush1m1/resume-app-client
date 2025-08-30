@@ -1,4 +1,3 @@
-import { DbDeleteComponent, DbGetComponent, DbUpdateComponent } from "../components/DbManipulate";
 import Link from "next/link";
 
 export default function Home() {
