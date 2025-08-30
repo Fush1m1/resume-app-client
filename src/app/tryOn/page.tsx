@@ -5,6 +5,7 @@ import RunAPIButton from "./components/RunAPIButton";
 import Link from "next/link";
 import Image from "next/image";
 import { ResultView } from "./components/ResultView";
+import { SectionWrapper } from "./components/SectionWrapper";
 
 export default function TryOn() {
   const [selectedPerson, setSelectedPerson] = useState<string | null>(null);
@@ -16,7 +17,7 @@ export default function TryOn() {
 
   const runScript = async() => {
     if (!selectedPerson || !selectedDress) {
-      alert("人物と服を選択してください");
+      alert("Please select a person and a dress.");
       return;
     }
 
@@ -36,14 +37,14 @@ export default function TryOn() {
       if (data.success) {
         setResultImage(data.resultImage);
       } else {
-        const errorMessage = data.error || "不明なエラー";
+        const errorMessage = data.error || "An unknown error occurred.";
         setError(errorMessage);
-        alert(`エラー: ${errorMessage}`);
+        alert(`Error: ${errorMessage}`);
       }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : String(err);
       setError(errorMessage);
-      alert(`Fetch エラー: ${errorMessage}`);
+      alert(`Fetch Error: ${errorMessage}`);
     } finally {
       setLoading(false);
     }
@@ -51,12 +52,21 @@ export default function TryOn() {
 
   useEffect(() => {
     if (resultImage && resultViewRef.current) {
-      resultViewRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      resultViewRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   }, [resultImage]);
 
   return (
-    <div className="space-y-8">
+    <div className="w-full max-w-5xl space-y-10">
+      <header className="text-center space-y-2 bg-purple-100 border border-purple-200 rounded-2xl p-8">
+        <h1 className="text-4xl font-bold tracking-tight text-purple-900 sm:text-5xl">
+          釈迦遺 Virtual Try-On
+        </h1>
+        <p className="text-lg text-purple-700">
+          Choose a person and a dress to generate a virtual try-on image.
+        </p>
+      </header>
+
       <Person
         selected={selectedPerson}
         onSelect={setSelectedPerson}
@@ -67,16 +77,17 @@ export default function TryOn() {
         onSelect={setSelectedDress}
         disabled={loading}
       />
-      <RunAPIButton loading={loading} onClick={runScript} />
-      <div ref={resultViewRef}>
+      <div className="flex justify-center pt-4">
+        <RunAPIButton loading={loading} onClick={runScript} />
+      </div>
+
+      <div ref={resultViewRef} className="pt-6">
         <ResultView loading={loading} error={error} resultImage={resultImage} />
       </div>
-      <BackHomeButton />
-      {/* 選択状態を確認するUI（デバッグ用） */}
-      <div className="mt-6 p-4 border rounded">
-        <p>選択された人物: {selectedPerson ?? "なし"}</p>
-        <p>選択された服: {selectedDress ?? "なし"}</p>
-      </div>
+
+      <footer className="text-center pt-10">
+        <BackHomeButton />
+      </footer>
     </div>
   );
 }
@@ -85,9 +96,9 @@ function BackHomeButton() {
   return (
     <Link
       href="/"
-      className="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
+      className="text-sm font-semibold text-gray-600 hover:text-gray-800 transition-colors"
     >
-      ホームへ戻る
+      &larr; Back to Home
     </Link>
   );
 }
@@ -100,23 +111,24 @@ type SelectProps = {
 
 function Person({ selected, onSelect, disabled }: SelectProps) {
   const persons = [
-    { id: "person1", src: "/png/person1.png", alt: "全身画像1" },
-    { id: "person2", src: "/png/person2.png", alt: "全身画像2" },
+    { id: "person1", src: "/png/person1.png", alt: "Person 1" },
+    { id: "person2", src: "/png/person2.png", alt: "Person 2" },
   ];
 
   return (
-    <div>
-      <p className="mb-4">全身画像を選んでください</p>
-      <div className="flex gap-4">
+    <SectionWrapper>
+      <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
         {persons.map((p) => (
           <button
             key={p.id}
             onClick={() => onSelect(p.id)}
             disabled={disabled}
-            className={`border-4 rounded-lg ${
-              selected === p.id ? "border-blue-600" : "border-transparent"
+            className={`rounded-xl overflow-hidden transition-all duration-200 focus:outline-none ring-offset-4 ring-offset-gray-50 ${
+              selected === p.id
+                ? "ring-2 ring-blue-500"
+                : "ring-1 ring-gray-300 hover:ring-2 hover:ring-blue-400"
             } ${
-              disabled ? "opacity-50 cursor-not-allowed" : ""
+              disabled ? "opacity-60 cursor-not-allowed" : "active:scale-95"
             }`}
           >
             <Image
@@ -124,35 +136,36 @@ function Person({ selected, onSelect, disabled }: SelectProps) {
               alt={p.alt}
               width={192}
               height={288}
-              className="rounded-lg shadow"
+              className="bg-white"
             />
           </button>
         ))}
       </div>
-    </div>
+    </SectionWrapper>
   );
 }
 
 function Dress({ selected, onSelect, disabled }: SelectProps) {
   const dresses = [
-    { id: "dress1", src: "/png/dress1.png", alt: "服1" },
-    { id: "dress2", src: "/png/dress2.png", alt: "服2" },
-    { id: "dress3", src: "/png/dress3.png", alt: "服3" },
+    { id: "dress1", src: "/png/dress1.png", alt: "Dress 1" },
+    { id: "dress2", src: "/png/dress2.png", alt: "Dress 2" },
+    { id: "dress3", src: "/png/dress3.png", alt: "Dress 3" },
   ];
 
   return (
-    <div>
-      <p className="mb-4">服を選んでください</p>
-      <div className="flex gap-4">
+    <SectionWrapper>
+      <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
         {dresses.map((d) => (
           <button
             key={d.id}
             onClick={() => onSelect(d.id)}
             disabled={disabled}
-            className={`border-4 rounded-lg ${
-              selected === d.id ? "border-blue-600" : "border-transparent"
+            className={`rounded-xl overflow-hidden transition-all duration-200 focus:outline-none ring-offset-4 ring-offset-gray-50 ${
+              selected === d.id
+                ? "ring-2 ring-blue-500"
+                : "ring-1 ring-gray-300 hover:ring-2 hover:ring-blue-400"
             } ${
-              disabled ? "opacity-50 cursor-not-allowed" : ""
+              disabled ? "opacity-60 cursor-not-allowed" : "active:scale-95"
             }`}
           >
             <Image
@@ -160,11 +173,11 @@ function Dress({ selected, onSelect, disabled }: SelectProps) {
               alt={d.alt}
               width={192}
               height={288}
-              className="rounded-lg shadow"
+              className="bg-white"
             />
           </button>
         ))}
       </div>
-    </div>
+    </SectionWrapper>
   );
 }

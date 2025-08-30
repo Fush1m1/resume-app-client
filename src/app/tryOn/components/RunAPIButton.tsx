@@ -5,19 +5,18 @@ export type RunAPIButtonProps = {
   onClick: () => void;
 };
 
-export default function RunAPIButton({
-  loading,
-  onClick,
-}: RunAPIButtonProps) {
+export default function RunAPIButton({ loading, onClick }: RunAPIButtonProps) {
   return (
-    <div className="space-y-4">
-      <button
-        onClick={onClick}
-        className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
-        disabled={loading}
-      >
-        {loading ? "実行中..." : "試着処理実行"}
-      </button>
-    </div>
+    <button
+      onClick={onClick}
+      className={`px-8 py-3 font-semibold text-white rounded-full transition-all duration-300 shadow-md focus:outline-none focus:ring-4 focus:ring-blue-300 ${
+        loading
+          ? "bg-gray-400 cursor-wait"
+          : "bg-blue-600 hover:bg-blue-700 active:bg-blue-800 hover:shadow-lg active:scale-95"
+      }`}
+      disabled={loading}
+    >
+      {loading ? "Generating..." : "Generate Image"}
+    </button>
   );
 }

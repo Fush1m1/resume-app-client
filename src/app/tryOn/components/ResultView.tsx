@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { SectionWrapper } from "./SectionWrapper";
 
 export type ResultViewProps = {
   loading: boolean;
@@ -7,35 +8,37 @@ export type ResultViewProps = {
 };
 
 export function ResultView({ loading, error, resultImage }: ResultViewProps) {
-  if (loading) {
-    return (
-      <div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div>
-        <p>エラーが発生しました: {error}</p>
-      </div>
-    );
-  }
-
-  if (!resultImage) {
-    return null;
-  }
-
   return (
-    <div>
-      <h2>生成結果</h2>
-      <Image
-        src={resultImage}
-        alt="試着結果"
-        width={192}
-        height={288}
-        className="rounded-lg shadow"
-      />
-    </div>
+    <SectionWrapper>
+      <div className="min-h-[320px] flex justify-center items-center">
+        {!resultImage && !loading && !error && (
+          <div className="text-center">
+            <p className="text-purple-700">Your result will appear here.</p>
+          </div>
+        )}
+        {loading && (
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
+            <p className="text-purple-700 mt-4">Please wait a moment.</p>
+          </div>
+        )}
+        {error && (
+          <div className="text-center">
+            <p className="text-red-500 font-medium">{error}</p>
+          </div>
+        )}
+        {resultImage && (
+          <div className="overflow-hidden rounded-lg shadow-lg bg-white p-1">
+            <Image
+              src={resultImage}
+              alt="Generated try-on result"
+              width={192}
+              height={288}
+              className="rounded-md"
+            />
+          </div>
+        )}
+      </div>
+    </SectionWrapper>
   );
 }
