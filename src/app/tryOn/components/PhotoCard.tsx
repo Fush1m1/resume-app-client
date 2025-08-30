@@ -10,10 +10,17 @@ type PhotoCardProps = {
 };
 
 export function PhotoCard({ id, src, alt, selected, onSelect, disabled }: PhotoCardProps) {
+  const handleClick = () => {
+    if (navigator.vibrate) {
+      navigator.vibrate(100); // Vibrate for 100ms
+    }
+    onSelect();
+  };
+
   return (
     <button
       key={id}
-      onClick={onSelect}
+      onClick={handleClick}
       disabled={disabled}
       className={`rounded-xl overflow-hidden transition-all duration-200 focus:outline-none ring-offset-4 ring-offset-gray-50 ${
         selected
