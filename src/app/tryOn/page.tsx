@@ -13,7 +13,7 @@ export default function TryOn() {
   const [error, setError] = useState<string | null>(null);
   const [resultImage, setResultImage] = useState<string | null>(null);
 
-  const runScript = async () => {
+  const runScript = async() => {
     if (!selectedPerson || !selectedDress) {
       alert("人物と服を選択してください");
       return;
