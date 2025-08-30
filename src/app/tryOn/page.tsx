@@ -13,7 +13,7 @@ export default function TryOn() {
   const [error, setError] = useState<string | null>(null);
   const [resultImage, setResultImage] = useState<string | null>(null);
 
-  const runScript = async() => {
+  const runScript = async () => {
     if (!selectedPerson || !selectedDress) {
       alert("人物と服を選択してください");
       return;
@@ -50,8 +50,16 @@ export default function TryOn() {
 
   return (
     <div className="space-y-8">
-      <Person selected={selectedPerson} onSelect={setSelectedPerson} />
-      <Dress selected={selectedDress} onSelect={setSelectedDress} />
+      <Person
+        selected={selectedPerson}
+        onSelect={setSelectedPerson}
+        disabled={loading}
+      />
+      <Dress
+        selected={selectedDress}
+        onSelect={setSelectedDress}
+        disabled={loading}
+      />
       <RunAPIButton loading={loading} onClick={runScript} />
       <ResultView loading={loading} error={error} resultImage={resultImage} />
       <BackHomeButton />
@@ -78,9 +86,10 @@ function BackHomeButton() {
 type SelectProps = {
   selected: string | null;
   onSelect: (value: string) => void;
+  disabled: boolean;
 };
 
-function Person({ selected, onSelect }: SelectProps) {
+function Person({ selected, onSelect, disabled }: SelectProps) {
   const persons = [
     { id: "person1", src: "/png/person1.png", alt: "全身画像1" },
     { id: "person2", src: "/png/person2.png", alt: "全身画像2" },
@@ -94,8 +103,11 @@ function Person({ selected, onSelect }: SelectProps) {
           <button
             key={p.id}
             onClick={() => onSelect(p.id)}
+            disabled={disabled}
             className={`border-4 rounded-lg ${
               selected === p.id ? "border-blue-600" : "border-transparent"
+            } ${
+              disabled ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >
             <Image
@@ -112,7 +124,7 @@ function Person({ selected, onSelect }: SelectProps) {
   );
 }
 
-function Dress({ selected, onSelect }: SelectProps) {
+function Dress({ selected, onSelect, disabled }: SelectProps) {
   const dresses = [
     { id: "dress1", src: "/png/dress1.png", alt: "服1" },
     { id: "dress2", src: "/png/dress2.png", alt: "服2" },
@@ -127,8 +139,11 @@ function Dress({ selected, onSelect }: SelectProps) {
           <button
             key={d.id}
             onClick={() => onSelect(d.id)}
+            disabled={disabled}
             className={`border-4 rounded-lg ${
               selected === d.id ? "border-blue-600" : "border-transparent"
+            } ${
+              disabled ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >
             <Image
