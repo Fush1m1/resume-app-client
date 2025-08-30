@@ -4,10 +4,11 @@ import { useState, useEffect, useRef } from "react";
 import RunAPIButton from "./components/RunAPIButton";
 
 import { PhotoCard } from "./components/PhotoCard";
-import { ResultView } from "./components/ResultView";
 import { SectionWrapper } from "./components/SectionWrapper";
 import { Header } from "./components/Header";
 import { BackHomeButton } from "./components/BackHomeButton";
+import { ToggleThemeButton } from "./components/ToggleThemeButton";
+import { ResultView } from "./components/ResultView";
 
 export default function TryOn() {
   const [selectedPerson, setSelectedPerson] = useState<string | null>(null);
@@ -16,6 +17,7 @@ export default function TryOn() {
   const [error, setError] = useState<string | null>(null);
   const [resultImage, setResultImage] = useState<string | null>(null);
   const resultViewRef = useRef<HTMLDivElement>(null);
+  const [isBlackAndWhite, setIsBlackAndWhite] = useState(false);
 
   const runScript = async() => {
     if (!selectedPerson || !selectedDress) {
@@ -59,7 +61,7 @@ export default function TryOn() {
   }, [resultImage]);
 
   return (
-    <div className="w-full max-w-5xl space-y-10 pb-30">
+    <div className={`w-full max-w-5xl space-y-10 pb-30 ${isBlackAndWhite ? 'black-and-white' : ''}`}>
       <Header />
       <Person
         selected={selectedPerson}
@@ -78,7 +80,13 @@ export default function TryOn() {
         <ResultView loading={loading} error={error} resultImage={resultImage} />
       </div>
       <footer className="text-center pt-50">
-        <BackHomeButton />
+        <div className="flex flex-col justify-center items-center space-y-4">
+          <ToggleThemeButton
+            isBlackAndWhite={isBlackAndWhite}
+            onClick={() => setIsBlackAndWhite(!isBlackAndWhite)}
+          />
+          <BackHomeButton />
+        </div>
       </footer>
     </div>
   );

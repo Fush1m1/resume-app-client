@@ -13,13 +13,13 @@ export function ResultView({ loading, error, resultImage }: ResultViewProps) {
       <div className="min-h-[320px] flex justify-center items-center">
         {!resultImage && !loading && !error && (
           <div className="text-center">
-            <p className="text-purple-700">Your result will appear here.</p>
+            <p className="text-[var(--header-text-secondary)]">Your result will appear here.</p>
           </div>
         )}
         {loading && (
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
-            <p className="text-purple-700 mt-4">Please wait a moment.</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--spinner-color)] mx-auto"></div>
+            <p className="text-[var(--header-text-secondary)] mt-4">Please wait a moment.</p>
           </div>
         )}
         {error && (
