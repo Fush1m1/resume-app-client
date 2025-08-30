@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import RunAPIButton from "./components/RunAPIButton";
 import Link from "next/link";
 import Image from "next/image";
@@ -12,6 +12,7 @@ export default function TryOn() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [resultImage, setResultImage] = useState<string | null>(null);
+  const resultViewRef = useRef<HTMLDivElement>(null);
 
   const runScript = async() => {
     if (!selectedPerson || !selectedDress) {
@@ -48,6 +49,12 @@ export default function TryOn() {
     }
   };
 
+  useEffect(() => {
+    if (resultImage && resultViewRef.current) {
+      resultViewRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [resultImage]);
+
   return (
     <div className="space-y-8">
       <Person
@@ -61,7 +68,9 @@ export default function TryOn() {
         disabled={loading}
       />
       <RunAPIButton loading={loading} onClick={runScript} />
-      <ResultView loading={loading} error={error} resultImage={resultImage} />
+      <div ref={resultViewRef}>
+        <ResultView loading={loading} error={error} resultImage={resultImage} />
+      </div>
       <BackHomeButton />
       {/* 選択状態を確認するUI（デバッグ用） */}
       <div className="mt-6 p-4 border rounded">
