@@ -28,6 +28,8 @@ export default function TryOn() {
     setLoading(true);
     setError(null);
     setResultImage(null);
+    setSelectedPerson(null);
+    setSelectedDress(null);
     try {
       const apiUrl = new URL("/api/vton", window.location.origin).href;
       const res = await fetch(apiUrl, {
