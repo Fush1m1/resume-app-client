@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import RunPythonButton from "./components/RunPythonButton";
+import RunAPIButton from "./components/RunAPIButton";
 import Link from "next/link";
 import Image from "next/image";
 import { ResultView } from "./components/ResultView";
@@ -14,7 +14,7 @@ export default function TryOn() {
     <div className="space-y-8">
       <Person selected={selectedPerson} onSelect={setSelectedPerson} />
       <Dress selected={selectedDress} onSelect={setSelectedDress} />
-      <RunPythonButton selectedPerson={selectedPerson} selectedDress={selectedDress} />
+      <RunAPIButton selectedPerson={selectedPerson} selectedDress={selectedDress} />
       <ResultView selectedPerson={selectedPerson} selectedDress={selectedDress} />
       <BackHomeButton />
       {/* 選択状態を確認するUI（デバッグ用） */}

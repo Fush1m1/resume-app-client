@@ -1,12 +1,15 @@
 import { useState } from "react";
 import Image from "next/image";
-import { RunPythonButtonProps } from "./RunPythonButton";
+import { RunAPIProps } from "./RunAPIButton";
 
-export function ResultView({ selectedPerson, selectedDress }: RunPythonButtonProps) {
+export function ResultView({ selectedPerson, selectedDress }: RunAPIProps) {
+  if (!selectedPerson || !selectedDress) {
+    return null;
+  }
   const resultFileName = `/results/vton_${selectedPerson}_${selectedDress}_0.png`;
   const [exists, setExists] = useState(true);
   // 画像読み込み失敗時に非表示
-  if (!exists) return;
+  if (!exists) return null;
 
   return (
     <div>

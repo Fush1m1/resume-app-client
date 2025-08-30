@@ -3,12 +3,12 @@
 import { useState } from "react";
 import Image from "next/image";
 
-export type RunPythonButtonProps = {
+export type RunAPIProps = {
   selectedPerson: string | null;
   selectedDress: string | null;
 };
 
-export default function RunPythonButton({ selectedPerson, selectedDress }: RunPythonButtonProps) {
+export default function RunAPIButton({ selectedPerson, selectedDress }: RunAPIProps) {
   const [loading, setLoading] = useState(false);
   const [resultImage, setResultImage] = useState<string | null>(null);
   const runScript = async() => {
