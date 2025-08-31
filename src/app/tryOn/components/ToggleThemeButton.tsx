@@ -9,7 +9,7 @@ export function ToggleThemeButton({ isBlackAndWhite, onClick }: ToggleThemeButto
       onClick={onClick}
       className="text-sm font-semibold text-gray-600 hover:text-gray-800 transition-colors"
     >
-      {isBlackAndWhite ? "Color Mode" : "Black & White Mode"}
+      {isBlackAndWhite ? "Switch to Color" : "Switch to Grayscale"}
     </button>
   );
 }
