@@ -22,8 +22,12 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json({ success: true, filePath: blob.url });
-  } catch (error: any) {
-    console.error("Error uploading image:", error);
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  } catch (err: unknown) {
+    let message = "不明なエラーです";
+
+    if (err instanceof Error) {
+      message = err.message;
+    }
+    return NextResponse.json({ success: false, error: message }, { status: 500 });
   }
 }
