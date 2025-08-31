@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, ChangeEvent } from 'react';
+import Image from "next/image";
 
 interface ImageUploadProps {
   onImageSelected: (imageUrl: string | null) => void;
@@ -41,6 +42,13 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageSelected }) => {
       />
       {previewUrl && (
         <div className="mt-4">
+          <Image
+            src={previewUrl}
+            alt="Image Preview"
+            width={192}
+            height={288}
+            className="bg-white"
+          />
           <img src={previewUrl} alt="Image Preview" className="max-w-full h-auto rounded-lg shadow-lg" />
         </div>
       )}

@@ -21,8 +21,13 @@ export async function POST(req: Request) {
     await fs.writeFile(filePath, buffer);
 
     return NextResponse.json({ success: true, filePath: "/png/uploaded-person.png" });
-  } catch (error: any) {
-    console.error("Error uploading image:", error);
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  } catch (err: unknown) {
+    let message = "不明なエラーです";
+
+    if (err instanceof Error) {
+      message = err.message;
+    }
+    console.error("Error uploading image:", err);
+    return NextResponse.json({ success: false, error: message }, { status: 500 });
   }
 }

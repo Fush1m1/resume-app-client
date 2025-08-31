@@ -23,7 +23,7 @@ export default function TryOn() {
   const [clearOnGenerate, setClearOnGenerate] = useState(true);
   const [userImageUrl, setUserImageUrl] = useState<string | null>(null);
 
-  const handleImageSelected = async (imageDataUrl: string | null) => {
+  const handleImageSelected = async(imageDataUrl: string | null) => {
     if (imageDataUrl) {
       try {
         const response = await fetch("/api/upload-image", {
