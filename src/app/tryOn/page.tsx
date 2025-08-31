@@ -19,7 +19,7 @@ export default function TryOn() {
   const [error, setError] = useState<string | null>(null);
   const [resultImage, setResultImage] = useState<string | null>(null);
   const resultViewRef = useRef<HTMLDivElement>(null);
-  const [isBlackAndWhite, setIsBlackAndWhite] = useState(false);
+  const [isGrayscale, setIsGrayscale] = useState(false);
   const [clearOnGenerate, setClearOnGenerate] = useState(true);
   const [userImageUrl, setUserImageUrl] = useState<string | null>(null);
 
@@ -34,7 +34,7 @@ export default function TryOn() {
         const data = await response.json();
         if (data.success) {
           setUserImageUrl(data.filePath);
-          setSelectedPerson("uploaded-person"); // Set selectedPerson to the ID for the uploaded image
+          setSelectedPerson("uploaded-person");
         } else {
           setError(data.error || "Failed to upload image.");
           alert(`Upload Error: ${data.error || "Failed to upload image."}`);
@@ -100,7 +100,7 @@ export default function TryOn() {
   }, [resultImage]);
 
   return (
-    <div className={`w-full max-w-5xl space-y-10 pb-30 ${isBlackAndWhite ? 'black-and-white' : ''}`}>
+    <div className={`w-full max-w-5xl space-y-10 pb-10 ${isGrayscale ? 'gray' : ''}`}>
       <Header />
       <ImageUpload onImageSelected={handleImageSelected} />
       <Person
@@ -123,8 +123,8 @@ export default function TryOn() {
       <footer className="text-center pt-50">
         <div className="flex flex-col justify-center items-center space-y-4">
           <ToggleThemeButton
-            isBlackAndWhite={isBlackAndWhite}
-            onClick={() => setIsBlackAndWhite(!isBlackAndWhite)}
+            isGrayscale={isGrayscale}
+            onClick={() => setIsGrayscale(!isGrayscale)}
           />
           <ToggleClearOnGenerateButton
             clearOnGenerate={clearOnGenerate}

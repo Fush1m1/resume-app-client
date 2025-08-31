@@ -18,20 +18,23 @@
   --button-bg-hover: theme('colors.violet.700');
   --button-bg-active: theme('colors.violet.800');
   --button-ring: theme('colors.violet.300');
+  --button-text: theme('colors.white');
 
   --spinner-color: theme('colors.purple.600');
 }
 
-.black-and-white {
+.gray {
   --header-bg: theme('colors.gray.200');
   --header-border: theme('colors.gray.300');
   --header-text-main: theme('colors.black');
   --header-text-secondary: theme('colors.gray.700');
 
-  --button-bg: theme('colors.gray.800');
+  --button-bg: theme('colors.white');
   --button-bg-hover: theme('colors.black');
   --button-bg-active: theme('colors.black');
   --button-ring: theme('colors.gray.300');
+  --button-text: theme('colors.black');
+
 
   --spinner-color: theme('colors.gray.600');
 }

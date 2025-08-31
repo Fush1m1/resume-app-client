@@ -28,7 +28,7 @@ export function PhotoCard({ id, src, alt, selected, onSelect, disabled }: PhotoC
         alt={alt}
         width={192}
         height={288}
-        className="bg-white"
+        className="bg-white h-[288px] w-[192px] object-cover"
       />
     </button>
   );

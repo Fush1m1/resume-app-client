@@ -1,15 +1,12 @@
 'use client';
 
-import React, { useState, ChangeEvent } from 'react';
-import Image from "next/image";
+import React, { ChangeEvent } from 'react';
 
 interface ImageUploadProps {
   onImageSelected: (imageUrl: string | null) => void;
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = ({ onImageSelected }) => {
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
 
@@ -17,12 +14,10 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageSelected }) => {
       const reader = new FileReader();
       reader.onloadend = () => {
         const result = reader.result as string;
-        setPreviewUrl(result);
-        onImageSelected(result); // Pass the data URL to the parent component
+        onImageSelected(result);
       };
       reader.readAsDataURL(file);
     } else {
-      setPreviewUrl(null);
       onImageSelected(null);
     }
   };
@@ -40,21 +35,6 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageSelected }) => {
           file:bg-blue-50 file:text-blue-700
           hover:file:bg-blue-100"
       />
-      {previewUrl && (
-        <div className="mt-4">
-          <Image
-            src={previewUrl}
-            alt="Image Preview"
-            width={192}
-            height={288}
-            className="bg-white"
-          />
-          <img src={previewUrl} alt="Image Preview" className="max-w-full h-auto rounded-lg shadow-lg" />
-        </div>
-      )}
-      {!previewUrl && (
-        <div className="text-gray-500">No image selected</div>
-      )}
     </div>
   );
 };
