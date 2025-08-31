@@ -96,7 +96,7 @@ export default function TryOn() {
 
 type SelectProps = {
   selected: string | null;
-  onSelect: (value: string) => void;
+  onSelect: (value: string | null) => void;
   disabled: boolean;
 };
 
@@ -116,7 +116,7 @@ function Person({ selected, onSelect, disabled }: SelectProps) {
             src={p.src}
             alt={p.alt}
             selected={selected === p.id}
-            onSelect={() => onSelect(p.id)}
+            onSelect={() => onSelect(selected === p.id ? null : p.id)}
             disabled={disabled}
           />
         ))}
@@ -142,7 +142,7 @@ function Dress({ selected, onSelect, disabled }: SelectProps) {
             src={d.src}
             alt={d.alt}
             selected={selected === d.id}
-            onSelect={() => onSelect(d.id)}
+            onSelect={() => onSelect(selected === d.id ? null : d.id)}
             disabled={disabled}
           />
         ))}
