@@ -20,7 +20,7 @@ export default function TryOn() {
   const [resultImage, setResultImage] = useState<string | null>(null);
   const resultViewRef = useRef<HTMLDivElement>(null);
   const [isGrayscale, setIsGrayscale] = useState(false);
-  const [clearOnGenerate, setClearOnGenerate] = useState(true);
+  const [clearOnGenerate, setClearOnGenerate] = useState(false);
   const [userImageUrl, setUserImageUrl] = useState<string | null>(null);
 
   const handleImageSelected = async(imageDataUrl: string | null) => {
@@ -120,7 +120,7 @@ export default function TryOn() {
       <div ref={resultViewRef} className="pt-6">
         <ResultView loading={loading} error={error} resultImage={resultImage} />
       </div>
-      <footer className="text-center pt-50">
+      <footer className="text-center pt-80">
         <div className="flex flex-col justify-center items-center space-y-4">
           <ToggleThemeButton
             isGrayscale={isGrayscale}
