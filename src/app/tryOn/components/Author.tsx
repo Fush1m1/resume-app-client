@@ -5,7 +5,7 @@ type AuthorProps = {
 };
 
 export function Author({ className }: AuthorProps) {
-      return (
+  return (
     <Link
       href="https://github.com/Fush1m1"
       className={className}

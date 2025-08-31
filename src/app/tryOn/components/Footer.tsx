@@ -14,13 +14,13 @@ export function Footer({ isGrayscale, setIsGrayscale }: FooterProps) {
   return (
     <footer className="text-center pt-80">
       <div className="flex flex-col justify-center items-center space-y-4">
-          <ToggleThemeButton
-            isGrayscale={isGrayscale}
-            onClick={() => setIsGrayscale(!isGrayscale)}
-            className={commonClassName}
-          />
-          <BackHomeButton className={commonClassName} />
-          <Author className={commonClassName} />
+        <ToggleThemeButton
+          isGrayscale={isGrayscale}
+          onClick={() => setIsGrayscale(!isGrayscale)}
+          className={commonClassName}
+        />
+        <BackHomeButton className={commonClassName} />
+        <Author className={commonClassName} />
       </div>
     </footer>
   );
