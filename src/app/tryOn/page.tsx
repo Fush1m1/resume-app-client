@@ -9,6 +9,7 @@ import { Header } from "./components/Header";
 import { BackHomeButton } from "./components/BackHomeButton";
 import { ToggleThemeButton } from "./components/ToggleThemeButton";
 import { ResultView } from "./components/ResultView";
+import { ToggleClearOnGenerateButton } from "./components/ToggleClearOnGenerateButton";
 
 export default function TryOn() {
   const [selectedPerson, setSelectedPerson] = useState<string | null>(null);
@@ -18,6 +19,7 @@ export default function TryOn() {
   const [resultImage, setResultImage] = useState<string | null>(null);
   const resultViewRef = useRef<HTMLDivElement>(null);
   const [isBlackAndWhite, setIsBlackAndWhite] = useState(false);
+  const [clearOnGenerate, setClearOnGenerate] = useState(true);
 
   const runScript = async() => {
     if (!selectedPerson || !selectedDress) {
@@ -28,8 +30,10 @@ export default function TryOn() {
     setLoading(true);
     setError(null);
     setResultImage(null);
-    setSelectedPerson(null);
-    setSelectedDress(null);
+    if (clearOnGenerate) {
+      setSelectedPerson(null);
+      setSelectedDress(null);
+    }
     try {
       const apiUrl = new URL("/api/vton", window.location.origin).href;
       const res = await fetch(apiUrl, {
@@ -86,6 +90,10 @@ export default function TryOn() {
           <ToggleThemeButton
             isBlackAndWhite={isBlackAndWhite}
             onClick={() => setIsBlackAndWhite(!isBlackAndWhite)}
+          />
+          <ToggleClearOnGenerateButton
+            clearOnGenerate={clearOnGenerate}
+            onClick={() => setClearOnGenerate(!clearOnGenerate)}
           />
           <BackHomeButton />
         </div>
