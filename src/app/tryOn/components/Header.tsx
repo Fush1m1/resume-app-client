@@ -5,7 +5,7 @@ export function Header() {
         釈迦遺 Virtual Try-On
       </h1>
       <p className="text-[var(--header-text-secondary)]">
-        Choose photos to generate images.
+        Choose photos to generate image.
       </p>
     </header>
   );

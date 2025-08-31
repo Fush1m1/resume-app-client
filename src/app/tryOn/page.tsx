@@ -9,6 +9,7 @@ import { Header } from "./components/Header";
 import { BackHomeButton } from "./components/BackHomeButton";
 import { ToggleThemeButton } from "./components/ToggleThemeButton";
 import { ResultView } from "./components/ResultView";
+import { ToggleClearOnGenerateButton } from "./components/ToggleClearOnGenerateButton";
 
 export default function TryOn() {
   const [selectedPerson, setSelectedPerson] = useState<string | null>(null);
@@ -18,6 +19,7 @@ export default function TryOn() {
   const [resultImage, setResultImage] = useState<string | null>(null);
   const resultViewRef = useRef<HTMLDivElement>(null);
   const [isBlackAndWhite, setIsBlackAndWhite] = useState(false);
+  const [clearOnGenerate, setClearOnGenerate] = useState(true);
 
   const runScript = async() => {
     if (!selectedPerson || !selectedDress) {
@@ -28,8 +30,10 @@ export default function TryOn() {
     setLoading(true);
     setError(null);
     setResultImage(null);
-    setSelectedPerson(null);
-    setSelectedDress(null);
+    if (clearOnGenerate) {
+      setSelectedPerson(null);
+      setSelectedDress(null);
+    }
     try {
       const apiUrl = new URL("/api/vton", window.location.origin).href;
       const res = await fetch(apiUrl, {
@@ -87,6 +91,10 @@ export default function TryOn() {
             isBlackAndWhite={isBlackAndWhite}
             onClick={() => setIsBlackAndWhite(!isBlackAndWhite)}
           />
+          <ToggleClearOnGenerateButton
+            clearOnGenerate={clearOnGenerate}
+            onClick={() => setClearOnGenerate(!clearOnGenerate)}
+          />
           <BackHomeButton />
         </div>
       </footer>
@@ -96,7 +104,7 @@ export default function TryOn() {
 
 type SelectProps = {
   selected: string | null;
-  onSelect: (value: string) => void;
+  onSelect: (value: string | null) => void;
   disabled: boolean;
 };
 
@@ -116,7 +124,7 @@ function Person({ selected, onSelect, disabled }: SelectProps) {
             src={p.src}
             alt={p.alt}
             selected={selected === p.id}
-            onSelect={() => onSelect(p.id)}
+            onSelect={() => onSelect(selected === p.id ? null : p.id)}
             disabled={disabled}
           />
         ))}
@@ -142,7 +150,7 @@ function Dress({ selected, onSelect, disabled }: SelectProps) {
             src={d.src}
             alt={d.alt}
             selected={selected === d.id}
-            onSelect={() => onSelect(d.id)}
+            onSelect={() => onSelect(selected === d.id ? null : d.id)}
             disabled={disabled}
           />
         ))}
