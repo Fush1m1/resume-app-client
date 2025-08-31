@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import fs from "fs/promises";
-import path from "path";
+import { put } from '@vercel/blob';
 
 export async function POST(req: Request) {
   try {
@@ -13,21 +12,18 @@ export async function POST(req: Request) {
 
     // Extract base64 data from Data URL
     const base64Data = imageData.replace(/^data:image\/\w+;base64,/, "");
+    const contentType = imageData.match(/^data:(image\/\w+);base64,/)?.[1] || 'image/png';
     const buffer = Buffer.from(base64Data, "base64");
 
-    const uploadDir = path.resolve(process.cwd(), "public", "png");
-    const filePath = path.join(uploadDir, "uploaded-person.png");
+    const filename = `uploaded-person-${Date.now()}.png`; // Unique filename
+    const blob = await put(filename, buffer, {
+      access: 'public',
+      contentType: contentType,
+    });
 
-    await fs.writeFile(filePath, buffer);
-
-    return NextResponse.json({ success: true, filePath: "/png/uploaded-person.png" });
-  } catch (err: unknown) {
-    let message = "不明なエラーです";
-
-    if (err instanceof Error) {
-      message = err.message;
-    }
-    console.error("Error uploading image:", err);
-    return NextResponse.json({ success: false, error: message }, { status: 500 });
+    return NextResponse.json({ success: true, filePath: blob.url });
+  } catch (error: any) {
+    console.error("Error uploading image:", error);
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }

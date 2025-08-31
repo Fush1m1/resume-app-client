@@ -1,4 +1,3 @@
-
 import { NextResponse } from "next/server";
 import { GoogleAuth } from "google-auth-library";
 import axios from "axios";
@@ -7,8 +6,22 @@ import path from "path";
 import fs from "fs/promises";
 import { Buffer } from "buffer";
 
-async function encodeImage(filePath: string): Promise<string> {
-  const imageBuffer = await fs.readFile(filePath);
+// Helper function to sanitize filenames
+function sanitizeFilename(filename: string): string {
+  return filename.replace(/[^a-zA-Z0-9-_.]/g, '_');
+}
+
+async function encodeImage(input: string): Promise<string> {
+  let imageBuffer: Buffer;
+  if (input.startsWith("http://") || input.startsWith("https://")) {
+    // Fetch image from URL
+    const response = await axios.get(input, { responseType: 'arraybuffer' });
+    imageBuffer = Buffer.from(response.data);
+  } else {
+    // Read image from local file path
+    const filePath = path.resolve(`./public/png/${input}.png`);
+    imageBuffer = await fs.readFile(filePath);
+  }
   return imageBuffer.toString("base64");
 }
 
@@ -36,11 +49,8 @@ export async function POST(req: Request) {
 
     const endpoint = `https://${location}-aiplatform.googleapis.com/v1/projects/${projectId}/locations/${location}/publishers/google/models/${modelId}:predict`;
 
-    const personImagePath = path.resolve(`./public/png/${person}.png`);
-    const dressImagePath = path.resolve(`./public/png/${dress}.png`);
-
-    const personBase64 = await encodeImage(personImagePath);
-    const productBase64 = await encodeImage(dressImagePath);
+    const personBase64 = await encodeImage(person);
+    const productBase64 = await encodeImage(dress);
 
     const requestBody = {
       instances: [
@@ -87,7 +97,9 @@ export async function POST(req: Request) {
     for (let i = 0; i < result.predictions.length; i++) {
       const prediction = result.predictions[i];
       const imgData = Buffer.from(prediction.bytesBase64Encoded, "base64");
-      const timestamp = `${person}_${dress}`;
+      const sanitizedPerson = sanitizeFilename(person);
+      const sanitizedDress = sanitizeFilename(dress);
+      const timestamp = `${sanitizedPerson}_${sanitizedDress}`;
       const filepath = path.join(outputDir, `vton_${timestamp}_${i}.png`);
       
       await sharp(imgData).toFile(filepath);

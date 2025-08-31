@@ -34,7 +34,7 @@ export default function TryOn() {
         const data = await response.json();
         if (data.success) {
           setUserImageUrl(data.filePath);
-          setSelectedPerson("uploaded-person");
+          setSelectedPerson(data.filePath);
         } else {
           setError(data.error || "Failed to upload image.");
           alert(`Upload Error: ${data.error || "Failed to upload image."}`);
@@ -155,12 +155,12 @@ function Person({ selected, onSelect, disabled, userImageUrl }: SelectProps) {
       <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
         {userImageUrl && (
           <PhotoCard
-            key="uploaded-person"
-            id="uploaded-person"
+            key={userImageUrl} // Use the URL as the key for the uploaded person
+            id={userImageUrl} // Use the URL as the ID for the uploaded person
             src={userImageUrl}
             alt="Your Uploaded Photo"
-            selected={selected === "uploaded-person"}
-            onSelect={() => onSelect(selected === "uploaded-person" ? null : "uploaded-person")}
+            selected={selected === userImageUrl}
+            onSelect={() => onSelect(selected === userImageUrl ? null : userImageUrl)}
             disabled={disabled}
           />
         )}
