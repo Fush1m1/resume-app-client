@@ -10,6 +10,7 @@ import { BackHomeButton } from "./components/BackHomeButton";
 import { ToggleThemeButton } from "./components/ToggleThemeButton";
 import { ResultView } from "./components/ResultView";
 import { ToggleClearOnGenerateButton } from "./components/ToggleClearOnGenerateButton";
+import ImageUpload from "./components/ImageUpload";
 
 export default function TryOn() {
   const [selectedPerson, setSelectedPerson] = useState<string | null>(null);
@@ -20,6 +21,38 @@ export default function TryOn() {
   const resultViewRef = useRef<HTMLDivElement>(null);
   const [isBlackAndWhite, setIsBlackAndWhite] = useState(false);
   const [clearOnGenerate, setClearOnGenerate] = useState(true);
+  const [userImageUrl, setUserImageUrl] = useState<string | null>(null);
+
+  const handleImageSelected = async (imageDataUrl: string | null) => {
+    if (imageDataUrl) {
+      try {
+        const response = await fetch("/api/upload-image", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ imageData: imageDataUrl }),
+        });
+        const data = await response.json();
+        if (data.success) {
+          setUserImageUrl(data.filePath);
+          setSelectedPerson("uploaded-person"); // Set selectedPerson to the ID for the uploaded image
+        } else {
+          setError(data.error || "Failed to upload image.");
+          alert(`Upload Error: ${data.error || "Failed to upload image."}`);
+          setUserImageUrl(null);
+          setSelectedPerson(null);
+        }
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : String(err);
+        setError(errorMessage);
+        alert(`Upload Fetch Error: ${errorMessage}`);
+        setUserImageUrl(null);
+        setSelectedPerson(null);
+      }
+    } else {
+      setUserImageUrl(null);
+      setSelectedPerson(null);
+    }
+  };
 
   const runScript = async() => {
     if (!selectedPerson || !selectedDress) {
@@ -69,10 +102,12 @@ export default function TryOn() {
   return (
     <div className={`w-full max-w-5xl space-y-10 pb-30 ${isBlackAndWhite ? 'black-and-white' : ''}`}>
       <Header />
+      <ImageUpload onImageSelected={handleImageSelected} />
       <Person
         selected={selectedPerson}
         onSelect={setSelectedPerson}
         disabled={loading}
+        userImageUrl={userImageUrl}
       />
       <Dress
         selected={selectedDress}
@@ -106,9 +141,10 @@ type SelectProps = {
   selected: string | null;
   onSelect: (value: string | null) => void;
   disabled: boolean;
+  userImageUrl?: string | null;
 };
 
-function Person({ selected, onSelect, disabled }: SelectProps) {
+function Person({ selected, onSelect, disabled, userImageUrl }: SelectProps) {
   const persons = [
     { id: "person1", src: "/png/person1.png", alt: "Person 1" },
     { id: "person2", src: "/png/person2.png", alt: "Person 2" },
@@ -117,6 +153,17 @@ function Person({ selected, onSelect, disabled }: SelectProps) {
   return (
     <SectionWrapper>
       <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
+        {userImageUrl && (
+          <PhotoCard
+            key="uploaded-person"
+            id="uploaded-person"
+            src={userImageUrl}
+            alt="Your Uploaded Photo"
+            selected={selected === "uploaded-person"}
+            onSelect={() => onSelect(selected === "uploaded-person" ? null : "uploaded-person")}
+            disabled={disabled}
+          />
+        )}
         {persons.map((p) => (
           <PhotoCard
             key={p.id}
