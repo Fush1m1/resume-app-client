@@ -1,10 +1,14 @@
 import Link from "next/link";
 
-export function BackHomeButton() {
+type BackHomeButtonProps = {
+  className?: string;
+};
+
+export function BackHomeButton({ className }: BackHomeButtonProps) {
   return (
     <Link
       href="/"
-      className="text-sm font-semibold text-gray-600 hover:text-gray-800 transition-colors"
+      className={className}
     >
       &larr; Back to Home
     </Link>

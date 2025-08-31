@@ -1,13 +1,14 @@
 type ToggleThemeButtonProps = {
   isGrayscale: boolean;
   onClick: () => void;
+  className?: string;
 };
 
-export function ToggleThemeButton({ isGrayscale: isGrayscale, onClick }: ToggleThemeButtonProps) {
+export function ToggleThemeButton({ isGrayscale: isGrayscale, onClick, className }: ToggleThemeButtonProps) {
   return (
     <button
       onClick={onClick}
-      className="text-sm font-semibold text-gray-600 hover:text-gray-800 transition-colors"
+      className={className}
     >
       {isGrayscale ? "Switch to color" : "Switch to grayscale"}
     </button>

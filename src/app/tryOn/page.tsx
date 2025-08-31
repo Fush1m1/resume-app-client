@@ -6,10 +6,8 @@ import RunAPIButton from "./components/RunAPIButton";
 import { PhotoCard } from "./components/PhotoCard";
 import { SectionWrapper } from "./components/SectionWrapper";
 import { Header } from "./components/Header";
-import { BackHomeButton } from "./components/BackHomeButton";
-import { ToggleThemeButton } from "./components/ToggleThemeButton";
+import { Footer } from "./components/Footer";
 import { ResultView } from "./components/ResultView";
-import { ToggleClearOnGenerateButton } from "./components/ToggleClearOnGenerateButton";
 import ImageUpload from "./components/ImageUpload";
 
 export default function TryOn() {
@@ -20,7 +18,6 @@ export default function TryOn() {
   const [resultImage, setResultImage] = useState<string | null>(null);
   const resultViewRef = useRef<HTMLDivElement>(null);
   const [isGrayscale, setIsGrayscale] = useState(false);
-  const [clearOnGenerate, setClearOnGenerate] = useState(false);
   const [userImageUrl, setUserImageUrl] = useState<string | null>(null);
 
   const handleImageSelected = async(imageDataUrl: string | null) => {
@@ -63,10 +60,7 @@ export default function TryOn() {
     setLoading(true);
     setError(null);
     setResultImage(null);
-    if (clearOnGenerate) {
-      setSelectedPerson(null);
-      setSelectedDress(null);
-    }
+
     try {
       const apiUrl = new URL("/api/vton", window.location.origin).href;
       const res = await fetch(apiUrl, {
@@ -117,22 +111,10 @@ export default function TryOn() {
       <div className="flex justify-center pt-4">
         <RunAPIButton loading={loading} onClick={runScript} />
       </div>
-      <div ref={resultViewRef} className="pt-6">
+      <div ref={resultViewRef} className="pt-4">
         <ResultView loading={loading} error={error} resultImage={resultImage} />
       </div>
-      <footer className="text-center pt-80">
-        <div className="flex flex-col justify-center items-center space-y-4">
-          <ToggleThemeButton
-            isGrayscale={isGrayscale}
-            onClick={() => setIsGrayscale(!isGrayscale)}
-          />
-          <ToggleClearOnGenerateButton
-            clearOnGenerate={clearOnGenerate}
-            onClick={() => setClearOnGenerate(!clearOnGenerate)}
-          />
-          <BackHomeButton />
-        </div>
-      </footer>
+      <Footer isGrayscale={isGrayscale} setIsGrayscale={setIsGrayscale} />
     </div>
   );
 }
