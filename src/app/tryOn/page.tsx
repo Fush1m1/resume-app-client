@@ -8,20 +8,23 @@ import { SectionWrapper } from "./components/SectionWrapper";
 import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
 import { ResultView } from "./components/ResultView";
-import ImageUpload from "./components/ImageUpload";
+import { LoadingOverlay } from "./components/LoadingOverlay";
 
 export default function TryOn() {
   const [selectedPerson, setSelectedPerson] = useState<string | null>(null);
   const [selectedDress, setSelectedDress] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [isScriptRunning, setIsScriptRunning] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [resultImage, setResultImage] = useState<string | null>(null);
   const resultViewRef = useRef<HTMLDivElement>(null);
   const [isGrayscale, setIsGrayscale] = useState(false);
   const [userImageUrl, setUserImageUrl] = useState<string | null>(null);
 
-  const handleImageSelected = async(imageDataUrl: string | null) => {
+  const handlePersonImageSelected = async(imageDataUrl: string | null) => {
     if (imageDataUrl) {
+      setIsUploading(true);
+      setError(null);
       try {
         const response = await fetch("/api/upload-image", {
           method: "POST",
@@ -44,6 +47,8 @@ export default function TryOn() {
         alert(`Upload Fetch Error: ${errorMessage}`);
         setUserImageUrl(null);
         setSelectedPerson(null);
+      } finally {
+        setIsUploading(false);
       }
     } else {
       setUserImageUrl(null);
@@ -57,7 +62,7 @@ export default function TryOn() {
       return;
     }
 
-    setLoading(true);
+    setIsScriptRunning(true);
     setError(null);
     setResultImage(null);
 
@@ -83,57 +88,79 @@ export default function TryOn() {
       setError(errorMessage);
       alert(`Fetch Error: ${errorMessage}`);
     } finally {
-      setLoading(false);
+      setIsScriptRunning(false);
     }
   };
 
   useEffect(() => {
     if (resultImage && resultViewRef.current) {
-      resultViewRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      resultViewRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
     }
   }, [resultImage]);
 
   return (
-    <div className={`w-full max-w-5xl space-y-10 pb-10 ${isGrayscale ? 'gray' : ''}`}>
+    <div
+      className={`w-full max-w-5xl space-y-10 pb-10 ${
+        isGrayscale ? "gray" : ""
+      }`}
+    >
+      <LoadingOverlay show={isUploading} />
       <Header />
-      <ImageUpload onImageSelected={handleImageSelected} />
       <Person
         selected={selectedPerson}
         onSelect={setSelectedPerson}
-        disabled={loading}
+        disabled={isScriptRunning || isUploading}
         userImageUrl={userImageUrl}
+        handleImageSelected={handlePersonImageSelected}
       />
       <Dress
         selected={selectedDress}
         onSelect={setSelectedDress}
-        disabled={loading}
+        disabled={isScriptRunning || isUploading}
       />
       <div className="flex justify-center pt-4">
-        <RunAPIButton loading={loading} onClick={runScript} />
+        <RunAPIButton isScriptRunning={isScriptRunning} onClick={runScript} disabled={isScriptRunning || isUploading}/>
       </div>
       <div ref={resultViewRef} className="pt-4">
-        <ResultView loading={loading} error={error} resultImage={resultImage} />
+        <ResultView loading={isScriptRunning} error={error} resultImage={resultImage} />
       </div>
       <Footer isGrayscale={isGrayscale} setIsGrayscale={setIsGrayscale} />
     </div>
   );
 }
 
-type SelectProps = {
+type SelectPersonProps = {
+  selected: string | null;
+  onSelect: (value: string | null) => void;
+  disabled: boolean;
+  userImageUrl?: string | null;
+  handleImageSelected: (value: string | null) => void;
+};
+
+type SelectDressProps = {
   selected: string | null;
   onSelect: (value: string | null) => void;
   disabled: boolean;
   userImageUrl?: string | null;
 };
 
-function Person({ selected, onSelect, disabled, userImageUrl }: SelectProps) {
+function Person({
+  selected,
+  onSelect,
+  disabled,
+  userImageUrl,
+  handleImageSelected,
+}: SelectPersonProps) {
   const persons = [
     { id: "person1", src: "/png/person1.png", alt: "Person 1" },
     { id: "person2", src: "/png/person2.png", alt: "Person 2" },
   ];
 
   return (
-    <SectionWrapper>
+    <SectionWrapper handleImageSelected={handleImageSelected}>
       <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
         {userImageUrl && (
           <PhotoCard
@@ -142,7 +169,9 @@ function Person({ selected, onSelect, disabled, userImageUrl }: SelectProps) {
             src={userImageUrl}
             alt="Your Uploaded Photo"
             selected={selected === userImageUrl}
-            onSelect={() => onSelect(selected === userImageUrl ? null : userImageUrl)}
+            onSelect={() =>
+              onSelect(selected === userImageUrl ? null : userImageUrl)
+            }
             disabled={disabled}
           />
         )}
@@ -162,7 +191,7 @@ function Person({ selected, onSelect, disabled, userImageUrl }: SelectProps) {
   );
 }
 
-function Dress({ selected, onSelect, disabled }: SelectProps) {
+function Dress({ selected, onSelect, disabled }: SelectDressProps) {
   const dresses = [
     { id: "dress1", src: "/png/dress1.png", alt: "Dress 1" },
     { id: "dress2", src: "/png/dress2.png", alt: "Dress 2" },

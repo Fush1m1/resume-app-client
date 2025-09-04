@@ -4,9 +4,10 @@ import React, { ChangeEvent } from 'react';
 
 interface ImageUploadProps {
   onImageSelected: (imageUrl: string | null) => void;
+  ref?: React.Ref<HTMLInputElement>;
 }
 
-const ImageUpload: React.FC<ImageUploadProps> = ({ onImageSelected }) => {
+export function ImageUpload({ onImageSelected, ref }: ImageUploadProps) {
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
 
@@ -23,20 +24,12 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageSelected }) => {
   };
 
   return (
-    <div className="flex flex-col items-center space-y-4 p-4 border rounded-lg shadow-md">
-      <input
-        type="file"
-        accept="image/*"
-        onChange={handleFileChange}
-        className="block w-full text-sm text-gray-500
-          file:mr-4 file:py-2 file:px-4
-          file:rounded-full file:border-0
-          file:text-sm file:font-semibold
-          file:bg-blue-50 file:text-blue-700
-          hover:file:bg-blue-100"
-      />
-    </div>
+    <input
+      ref={ref}
+      type="file"
+      accept="image/*"
+      onChange={handleFileChange}
+      style={{ display: 'none' }}
+    />
   );
 };
-
-export default ImageUpload;
