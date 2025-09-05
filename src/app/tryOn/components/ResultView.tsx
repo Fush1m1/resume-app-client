@@ -10,13 +10,13 @@ export function ResultView({ resultImage }: ResultViewProps) {
     resultImage ? 
       <SectionWrapper>
         <div className="min-h-[320px] flex justify-center items-center">
-          <div className="overflow-hidden rounded-lg shadow-lg bg-white p-1">
+          <div className="rounded-xl shadow-lg overflow-hidden ring-offset-4 ring-offset-gray-50 ring-1 ring-gray-300">
             <Image
               src={resultImage}
               alt="Generated try-on result"
               width={192}
               height={288}
-              className="rounded-md"
+              className="bg-white h-[288px] w-[192px] object-cover"
             />
           </div>
         </div>
