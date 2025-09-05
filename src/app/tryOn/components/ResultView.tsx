@@ -41,6 +41,6 @@ export function ResultView({ loading, error, resultImage }: ResultViewProps) {
           )}
         </div>
       </SectionWrapper>
-    : <div></div>
+      : <div></div>
   );
 }
