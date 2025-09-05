@@ -7,7 +7,7 @@ type UseScriptProps = {
   selectedDress: string | null;
 };
 
-export function useScript ({
+export function useScript({
   selectedPerson,
   selectedDress,
 }: UseScriptProps)  {
@@ -15,7 +15,7 @@ export function useScript ({
   const [resultImage, setResultImage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const runScript = async () => {
+  const runScript = async() => {
     if (!selectedPerson || !selectedDress) {
       alert("Please select a person and a dress.");
       return;
