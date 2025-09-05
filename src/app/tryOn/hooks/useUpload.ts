@@ -11,7 +11,7 @@ export function useUpload({ setSelectedPerson }: UseUploadProps) {
   const [userImageUrl, setUserImageUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const handlePersonImageUpload = async (imageDataUrl: string | null) => {
+  const handlePersonImageUpload = async(imageDataUrl: string | null) => {
     if (imageDataUrl) {
       setIsUploading(true);
       setError(null);
