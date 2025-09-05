@@ -67,9 +67,15 @@ export default function TryOn() {
       <div className="flex justify-center pt-4">
         <RunAPIButton isScriptRunning={isScriptRunning} onClick={runScript} disabled={isScriptRunning || isUploading}/>
       </div>
+      {resultImage && (
       <div ref={resultViewRef} className="pt-4">
-        <ResultView loading={isScriptRunning} error={error} resultImage={resultImage} />
+          <ResultView
+            loading={isScriptRunning}
+            error={error}
+            resultImage={resultImage}
+          />
       </div>
+      )}
       <Footer isGrayscale={isGrayscale} setIsGrayscale={setIsGrayscale} />
     </div>
   );
@@ -103,7 +109,7 @@ function Person({
   ];
 
   return (
-    <SectionWrapper handlePersonImageUpload={handlePersonImageUpload}>
+    <SectionWrapper handlePersonImageUpload={disabled ? undefined : handlePersonImageUpload}>
       <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
         {userImageUrl && (
           <PhotoCard

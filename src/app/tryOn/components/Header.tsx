@@ -6,7 +6,7 @@ export function Header() {
       </h1>
       <div className="inline-block text-left">
         <p className="text-[var(--header-text-secondary)]">
-          Choose to generate image.
+          Select to generate image.
         </p>
         <p className="text-[var(--header-text-secondary)]">
           Upload by tapping below.
