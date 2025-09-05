@@ -99,8 +99,7 @@ export async function POST(req: Request) {
       const imgData = Buffer.from(prediction.bytesBase64Encoded, "base64");
       const sanitizedPerson = sanitizeFilename(person);
       const sanitizedDress = sanitizeFilename(dress);
-      const timestamp = `${sanitizedPerson}_${sanitizedDress}`;
-      const filepath = path.join(outputDir, `vton_${timestamp}_${i}.png`);
+      const filepath = path.join(outputDir, `vton_${sanitizedPerson}_${sanitizedDress}_${i}.png`);
       
       await sharp(imgData).toFile(filepath);
       

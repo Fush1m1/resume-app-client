@@ -9,88 +9,29 @@ import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
 import { ResultView } from "./components/ResultView";
 import { LoadingOverlay } from "./components/LoadingOverlay";
+import { useUpload } from "./hooks/useUpload";
+import { useScript } from "./hooks/useScript";
 
 export default function TryOn() {
   const [selectedPerson, setSelectedPerson] = useState<string | null>(null);
   const [selectedDress, setSelectedDress] = useState<string | null>(null);
-  const [isScriptRunning, setIsScriptRunning] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [resultImage, setResultImage] = useState<string | null>(null);
+
+  const {
+    isUploading,
+    userImageUrl,
+    error: uploadError,
+    handlePersonImageUpload,
+  } = useUpload({ setSelectedPerson });
+
+  const {
+    isScriptRunning,
+    resultImage,
+    error: scriptError,
+    runScript,
+  } = useScript({ selectedPerson, selectedDress });
+
   const resultViewRef = useRef<HTMLDivElement>(null);
   const [isGrayscale, setIsGrayscale] = useState(false);
-  const [userImageUrl, setUserImageUrl] = useState<string | null>(null);
-
-  const handlePersonImageSelected = async(imageDataUrl: string | null) => {
-    if (imageDataUrl) {
-      setIsUploading(true);
-      setError(null);
-      try {
-        const response = await fetch("/api/upload-image", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ imageData: imageDataUrl }),
-        });
-        const data = await response.json();
-        if (data.success) {
-          setUserImageUrl(data.filePath);
-          setSelectedPerson(data.filePath);
-        } else {
-          setError(data.error || "Failed to upload image.");
-          alert(`Upload Error: ${data.error || "Failed to upload image."}`);
-          setUserImageUrl(null);
-          setSelectedPerson(null);
-        }
-      } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : String(err);
-        setError(errorMessage);
-        alert(`Upload Fetch Error: ${errorMessage}`);
-        setUserImageUrl(null);
-        setSelectedPerson(null);
-      } finally {
-        setIsUploading(false);
-      }
-    } else {
-      setUserImageUrl(null);
-      setSelectedPerson(null);
-    }
-  };
-
-  const runScript = async() => {
-    if (!selectedPerson || !selectedDress) {
-      alert("Please select a person and a dress.");
-      return;
-    }
-
-    setIsScriptRunning(true);
-    setError(null);
-    setResultImage(null);
-
-    try {
-      const apiUrl = new URL("/api/vton", window.location.origin).href;
-      const res = await fetch(apiUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ person: selectedPerson, dress: selectedDress }),
-      });
-
-      const data = await res.json();
-
-      if (data.success) {
-        setResultImage(data.resultImage);
-      } else {
-        const errorMessage = data.error || "An unknown error occurred.";
-        setError(errorMessage);
-        alert(`Error: ${errorMessage}`);
-      }
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : String(err);
-      setError(errorMessage);
-      alert(`Fetch Error: ${errorMessage}`);
-    } finally {
-      setIsScriptRunning(false);
-    }
-  };
 
   useEffect(() => {
     if (resultImage && resultViewRef.current) {
@@ -100,6 +41,8 @@ export default function TryOn() {
       });
     }
   }, [resultImage]);
+
+  const error = uploadError || scriptError;
 
   return (
     <div
@@ -114,7 +57,7 @@ export default function TryOn() {
         onSelect={setSelectedPerson}
         disabled={isScriptRunning || isUploading}
         userImageUrl={userImageUrl}
-        handleImageSelected={handlePersonImageSelected}
+        handlePersonImageUpload={handlePersonImageUpload}
       />
       <Dress
         selected={selectedDress}
@@ -137,7 +80,7 @@ type SelectPersonProps = {
   onSelect: (value: string | null) => void;
   disabled: boolean;
   userImageUrl?: string | null;
-  handleImageSelected: (value: string | null) => void;
+  handlePersonImageUpload: (value: string | null) => void;
 };
 
 type SelectDressProps = {
@@ -152,7 +95,7 @@ function Person({
   onSelect,
   disabled,
   userImageUrl,
-  handleImageSelected,
+  handlePersonImageUpload,
 }: SelectPersonProps) {
   const persons = [
     { id: "person1", src: "/png/person1.png", alt: "Person 1" },
@@ -160,7 +103,7 @@ function Person({
   ];
 
   return (
-    <SectionWrapper handleImageSelected={handleImageSelected}>
+    <SectionWrapper handlePersonImageUpload={handlePersonImageUpload}>
       <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
         {userImageUrl && (
           <PhotoCard
