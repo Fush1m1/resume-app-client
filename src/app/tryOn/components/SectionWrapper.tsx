@@ -3,24 +3,28 @@ import { ImageUpload } from "./ImageUpload";
 
 export function SectionWrapper({
   children,
+  disabled,
   handlePersonImageUpload,
 }: {
   children: React.ReactNode;
-  handlePersonImageUpload?: (value: string | null) => void | undefined;
+  disabled?: boolean;
+  handlePersonImageUpload?: (value: string | null) => void;
 }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleClick = () => {
-    if (handlePersonImageUpload) {
+    if (handlePersonImageUpload && !disabled) {
       fileInputRef.current?.click();
     }
   };
 
   return (
     <div
-      className={`bg-[var(--header-bg)] border border-[var(--header-border)] rounded-2xl p-6 sm:p-8 ${
-        handlePersonImageUpload ? "cursor-pointer" : ""
-      }`}
+      className={`
+        bg-[var(--header-bg)] border border-[var(--header-border)] rounded-2xl p-6 sm:p-8
+        ${(handlePersonImageUpload && !disabled) ? "cursor-pointer" : ""}
+        ${(handlePersonImageUpload && disabled) ? "cursor-not-allowed" : ""}
+      `}
       onClick={handleClick}
     >
       {handlePersonImageUpload && (
