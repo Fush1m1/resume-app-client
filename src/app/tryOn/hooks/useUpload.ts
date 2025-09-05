@@ -8,11 +8,9 @@ type UseUploadProps = {
 
 export function useUpload({ setSelectedPerson }: UseUploadProps) {
   const [userImageUrl, setUserImageUrl] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
 
   const handlePersonImageUpload = async(imageDataUrl: string | null) => {
     if (imageDataUrl) {
-      setError(null);
       try {
         // Save the image data URL to localStorage
         localStorage.setItem("userImage", imageDataUrl);
@@ -22,7 +20,6 @@ export function useUpload({ setSelectedPerson }: UseUploadProps) {
         setSelectedPerson(imageDataUrl);
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : String(err);
-        setError(errorMessage);
         alert(`Save Error: ${errorMessage}`);
         setUserImageUrl(null);
         setSelectedPerson(null);
@@ -38,7 +35,6 @@ export function useUpload({ setSelectedPerson }: UseUploadProps) {
 
   return {
     userImageUrl,
-    error,
     handlePersonImageUpload,
   };
 };

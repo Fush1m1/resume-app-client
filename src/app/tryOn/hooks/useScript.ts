@@ -13,7 +13,6 @@ export function useScript({
 }: UseScriptProps)  {
   const [isScriptRunning, setIsScriptRunning] = useState(false);
   const [resultImage, setResultImage] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
 
   const runScript = async() => {
     if (!selectedPerson || !selectedDress) {
@@ -22,7 +21,6 @@ export function useScript({
     }
 
     setIsScriptRunning(true);
-    setError(null);
     setResultImage(null);
 
     try {
@@ -39,12 +37,10 @@ export function useScript({
         setResultImage(data.resultImage);
       } else {
         const errorMessage = data.error || "An unknown error occurred.";
-        setError(errorMessage);
         alert(`Error: ${errorMessage}`);
       }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : String(err);
-      setError(errorMessage);
       alert(`Fetch Error: ${errorMessage}`);
     } finally {
       setIsScriptRunning(false);
@@ -54,7 +50,6 @@ export function useScript({
   return {
     isScriptRunning,
     resultImage,
-    error,
     runScript,
   };
 };
