@@ -7,13 +7,11 @@ type UseUploadProps = {
 };
 
 export function useUpload({ setSelectedPerson }: UseUploadProps) {
-  const [isUploading, setIsUploading] = useState(false);
   const [userImageUrl, setUserImageUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const handlePersonImageUpload = async(imageDataUrl: string | null) => {
     if (imageDataUrl) {
-      setIsUploading(true);
       setError(null);
       try {
         // Save the image data URL to localStorage
@@ -29,7 +27,6 @@ export function useUpload({ setSelectedPerson }: UseUploadProps) {
         setUserImageUrl(null);
         setSelectedPerson(null);
       } finally {
-        setIsUploading(false);
       }
     } else {
       setUserImageUrl(null);
@@ -40,7 +37,6 @@ export function useUpload({ setSelectedPerson }: UseUploadProps) {
   };
 
   return {
-    isUploading,
     userImageUrl,
     error,
     handlePersonImageUpload,

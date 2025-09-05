@@ -17,7 +17,6 @@ export default function TryOn() {
   const [selectedDress, setSelectedDress] = useState<string | null>(null);
 
   const {
-    isUploading,
     userImageUrl,
     error: uploadError,
     handlePersonImageUpload,
@@ -50,31 +49,31 @@ export default function TryOn() {
         isGrayscale ? "gray" : ""
       }`}
     >
-      <LoadingOverlay show={isUploading} />
+      <LoadingOverlay show={isScriptRunning} />
       <Header />
       <Person
         selected={selectedPerson}
         onSelect={setSelectedPerson}
-        disabled={isScriptRunning || isUploading}
+        disabled={isScriptRunning}
         userImageUrl={userImageUrl}
         handlePersonImageUpload={handlePersonImageUpload}
       />
       <Dress
         selected={selectedDress}
         onSelect={setSelectedDress}
-        disabled={isScriptRunning || isUploading}
+        disabled={isScriptRunning}
       />
       <div className="flex justify-center pt-4">
-        <RunAPIButton isScriptRunning={isScriptRunning} onClick={runScript} disabled={isScriptRunning || isUploading}/>
+        <RunAPIButton isScriptRunning={isScriptRunning} onClick={runScript} disabled={isScriptRunning}/>
       </div>
       {resultImage && (
-      <div ref={resultViewRef} className="pt-4">
+        <div ref={resultViewRef} className="pt-4">
           <ResultView
             loading={isScriptRunning}
             error={error}
             resultImage={resultImage}
           />
-      </div>
+        </div>
       )}
       <Footer isGrayscale={isGrayscale} setIsGrayscale={setIsGrayscale} />
     </div>
