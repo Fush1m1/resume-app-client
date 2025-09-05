@@ -5,15 +5,30 @@ import sharp from "sharp";
 import path from "path";
 import fs from "fs/promises";
 import { Buffer } from "buffer";
+import crypto from "crypto";
+
+// Helper function to create a hash for filenames
+function createHash(data: string): string {
+  return crypto.createHash('sha256').update(data).digest('hex');
+}
 
 // Helper function to sanitize filenames
 function sanitizeFilename(filename: string): string {
+  // If the filename is a data URL, create a hash
+  if (filename.startsWith("data:image")) {
+    return createHash(filename);
+  }
+  // Otherwise, sanitize as before
   return filename.replace(/[^a-zA-Z0-9-_.]/g, '_');
 }
 
 async function encodeImage(input: string): Promise<string> {
   let imageBuffer: Buffer;
-  if (input.startsWith("http://") || input.startsWith("https://")) {
+  if (input.startsWith("data:image")) {
+    // Handle data URL
+    const base64Data = input.replace(/^data:image\/\w+;base64,/, "");
+    imageBuffer = Buffer.from(base64Data, "base64");
+  } else if (input.startsWith("http://") || input.startsWith("https://")) {
     // Fetch image from URL
     const response = await axios.get(input, { responseType: 'arraybuffer' });
     imageBuffer = Buffer.from(response.data);
