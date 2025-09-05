@@ -14,11 +14,10 @@ function createHash(data: string): string {
 
 // Helper function to sanitize filenames
 function sanitizeFilename(filename: string): string {
-  // If the filename is a data URL, create a hash
+  // If the filename is a data URL, create a hash that always consists of [0-9a-f].
   if (filename.startsWith("data:image")) {
     return createHash(filename);
   }
-  // Otherwise, sanitize as before
   return filename.replace(/[^a-zA-Z0-9-_.]/g, '_');
 }
 

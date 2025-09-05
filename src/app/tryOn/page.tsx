@@ -66,15 +66,13 @@ export default function TryOn() {
       <div className="flex justify-center pt-4">
         <RunAPIButton isScriptRunning={isScriptRunning} onClick={runScript} disabled={isScriptRunning}/>
       </div>
-      {resultImage && (
-        <div ref={resultViewRef} className="pt-4">
-          <ResultView
-            loading={isScriptRunning}
-            error={error}
-            resultImage={resultImage}
-          />
-        </div>
-      )}
+      <div ref={resultViewRef} className="pt-4">
+        <ResultView
+          loading={isScriptRunning}
+          error={error}
+          resultImage={resultImage}
+        />
+      </div>
       <Footer isGrayscale={isGrayscale} setIsGrayscale={setIsGrayscale} />
     </div>
   );
