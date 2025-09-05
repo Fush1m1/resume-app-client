@@ -6,7 +6,7 @@ export function SectionWrapper({
   handlePersonImageUpload,
 }: {
   children: React.ReactNode;
-  handlePersonImageUpload?: (value: string | null) => void;
+  handlePersonImageUpload?: (value: string | null) => void | undefined;
 }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
