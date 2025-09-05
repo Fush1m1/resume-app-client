@@ -15,18 +15,20 @@ export function PhotoCard({ id, src, alt, selected, onSelect, disabled }: PhotoC
     onSelect();
   };
 
+  const baseClasses = "rounded-xl shadow-lg overflow-hidden ring-offset-4 ring-offset-gray-50 transition-all duration-200 focus:outline-none";
+  const conditionalClasses = [
+    disabled ? "opacity-60 cursor-not-allowed" : "active:scale-95",
+    selected
+      ? "ring-5 ring-blue-500"
+      : "ring-1 ring-gray-300 hover:ring-2 hover:ring-blue-400",
+  ].join(" ");
+
   return (
     <button
       key={id}
       onClick={handleClick}
       disabled={disabled}
-      className={`rounded-xl overflow-hidden transition-all duration-200 focus:outline-none ring-offset-4 ring-offset-gray-50 ${
-        selected
-          ? "ring-5 ring-blue-500"
-          : "ring-1 ring-gray-300 hover:ring-2 hover:ring-blue-400"
-      } ${
-        disabled ? "opacity-60 cursor-not-allowed" : "active:scale-95"
-      }`}
+      className={`${baseClasses} ${conditionalClasses}`}
     >
       <Image
         src={src}
