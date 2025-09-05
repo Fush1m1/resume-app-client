@@ -28,10 +28,6 @@ async function encodeImage(input: string): Promise<string> {
     // Handle data URL
     const base64Data = input.replace(/^data:image\/\w+;base64,/, "");
     imageBuffer = Buffer.from(base64Data, "base64");
-  // } else if (input.startsWith("http://") || input.startsWith("https://")) {
-  //   // Fetch image from URL
-  //   const response = await axios.get(input, { responseType: 'arraybuffer' });
-  //   imageBuffer = Buffer.from(response.data);
   } else {
     // Read image from local file path
     const filePath = path.resolve(`./public/png/${input}.png`);
