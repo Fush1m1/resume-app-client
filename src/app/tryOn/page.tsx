@@ -58,11 +58,18 @@ export default function TryOn() {
         onSelect={setSelectedDress}
         disabled={isScriptRunning}
       />
-      <RunAPIButton isScriptRunning={isScriptRunning} onClick={runScript} disabled={isScriptRunning}/>
+      <RunAPIButton
+        isScriptRunning={isScriptRunning}
+        onClick={runScript}
+        disabled={isScriptRunning}
+      />
       <div ref={resultViewRef}>
         <ResultView resultImage={resultImage}/>
       </div>
-      <Footer isGrayscale={isGrayscale} setIsGrayscale={setIsGrayscale} />
+      <Footer
+        isGrayscale={isGrayscale}
+        setIsGrayscale={setIsGrayscale}
+      />
     </div>
   );
 }
